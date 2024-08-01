@@ -7,7 +7,7 @@
 .wrap {
     width: 100%;
     min-height: 100vh;
-    background-color: cornflowerblue;
+    background-color: green;
     display: flex;
     justify-content: center;
     align-items: center;
