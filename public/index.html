@@ -1,16 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.css'
+        integrity='sha512-8BU3emz11z9iF75b10oPjjpamM4Mz23yQFQymbtwyPN3mNWHxpgeqyrYnkIUP6A8KyAj5k2p3MiYLtYqew7gIw=='
+        crossorigin='anonymous' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=ZCOOL+XiaoWei&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
-    <div class="wrap"> 
-        <h1>Serevr <a href="/admin">admin</a></h1>
+    <div class="wrap">
+        <header>
+            <nav class="leftNav">
+                <a href="/home">Home</a>
+                <a href="/popularProduct">Popular product</a>
+                <a href="/bestProduct">Best product</a>
+            </nav>
+            <div class="logo">
+                <img src="./img/Logo.png" alt="Logo">
+            </div>
+            <nav class="rightNav">
+                <a href="/customerFeedback">Customer feedback</a>
+                <a href="/blog">From our blog</a>
+            </nav>
+            <div class="btnContainer">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </header>
+        <main>
+            <div class="textContainer">
+                <h1>ONE OF THE BEST COFFEE HOUSE IN YOUR HOME TOWN</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit do eiusmod veniam, quis nostrud exercitation
+                    laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <div class="btnContainer">
+                    <button class="exploreBtn">Explore More</button>
+                    <button class="readBtn">Read More</button>
+                </div>
+            </div>
+            <img src="./img/homeImg.png" alt="home img">
+        </main>
     </div>
 
     <script src="./main.js"></script>
 </body>
+
 </html>

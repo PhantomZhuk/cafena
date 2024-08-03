@@ -1,14 +1,108 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .wrap {
-    width: 100%;
-    min-height: 100vh;
-    background-color: green;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f1ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+.wrap header {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 170px;
+}
+.wrap header nav a {
+  text-decoration: none;
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #000;
+  margin: 20px;
+}
+.wrap header .logo img {
+  width: 90px;
+}
+.wrap header .btnContainer i {
+  font-size: 20px;
+  color: #000;
+  margin: 35px;
+  cursor: pointer;
+}
+.wrap main {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 176.3px;
+}
+.wrap main .textContainer {
+  width: 55%;
+}
+.wrap main .textContainer h1 {
+  font-family: "ZCOOL XiaoWei";
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 156%;
+  letter-spacing: 0.04em;
+  color: #232020;
+  margin: 60px 0;
+}
+.wrap main .textContainer p {
+  font-family: "Open Sans";
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 167%;
+  letter-spacing: 0.04em;
+  color: #404040;
+  margin: 60px 0;
+  width: 600px;
+}
+.wrap main .textContainer .btnContainer {
+  margin: 60px 0;
+}
+.wrap main .textContainer .btnContainer .exploreBtn {
+  width: 153px;
+  height: 45px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+  background-color: #232020;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 162%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #fff;
+  border: none;
+  margin-right: 24px;
+}
+.wrap main .textContainer .btnContainer .readBtn {
+  border: 1px solid #d48a5c;
+  width: 153px;
+  height: 45px;
+  box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 162%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #000;
+}
+.wrap main img {
+  width: 550px;
+}/*# sourceMappingURL=style.css.map */

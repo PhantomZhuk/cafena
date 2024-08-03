@@ -11,7 +11,6 @@ app.get(`/home`, (req, res)=>{
     res.sendFile(path.join(__dirname, `public`, `index.html`))
 })
 
-
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)
 });
