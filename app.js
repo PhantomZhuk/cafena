@@ -11,6 +11,10 @@ app.get(`/home`, (req, res)=>{
     res.sendFile(path.join(__dirname, `public`, `index.html`))
 })
 
+app.get(`/popularProduct`, (req, res)=>{
+    res.sendFile(path.join(__dirname, `public`, `popularProduct`, `popularProduct.html`))
+})
+
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)
 });

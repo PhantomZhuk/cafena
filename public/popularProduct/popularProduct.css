@@ -1,0 +1,88 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.wrap {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f1ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap header {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 170px;
+}
+.wrap header nav a {
+  text-decoration: none;
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #000;
+  margin: 20px;
+}
+.wrap header .logo img {
+  width: 90px;
+}
+.wrap header .btnContainer i {
+  font-size: 20px;
+  color: #000;
+  margin: 35px;
+  cursor: pointer;
+}
+.wrap main {
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 170px;
+}
+.wrap main .textContainer {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .popularCoffeeContainer {
+  width: 100%;
+  min-height: 75vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer {
+  border: 3px solid #414141;
+  width: 475px;
+  height: 114px;
+  background: rgba(96, 58, 45, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer img {
+  width: 33%;
+  border-radius: 50%;
+  position: relative;
+  right: 30px;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer h2 {
+  position: relative;
+  right: 30px;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer .coffeePrise {
+  position: relative;
+  right: 30px;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}/*# sourceMappingURL=popularProduct.css.map */
