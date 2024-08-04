@@ -1,0 +1,186 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.wrap {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f1ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap header {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 170px;
+}
+.wrap header nav a {
+  text-decoration: none;
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #000;
+  margin: 20px;
+}
+.wrap header .logo img {
+  width: 90px;
+}
+.wrap header .btnContainer i {
+  font-size: 20px;
+  color: #000;
+  margin: 35px;
+  cursor: pointer;
+}
+.wrap main {
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 180px 100px 180px;
+}
+.wrap main .customerReviewHeader {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .reviewsContainer {
+  width: 100%;
+  min-height: 45vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap main .reviewsContainer .topContainer {
+  width: 100%;
+  min-height: 20vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wrap main .reviewsContainer .topContainer svg {
+  cursor: pointer;
+}
+.wrap main .reviewsContainer .topContainer p {
+  width: 60%;
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #5c5c5c;
+}
+.wrap main .reviewsContainer .bottomContainer {
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .reviewsContainer .bottomContainer p {
+  font-family: "ZCOOL XiaoWei";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 406%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #1c1a1a;
+}
+.wrap main .reservationMainContainer {
+  width: 100%;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .reservationMainContainer .reservationContainer {
+  width: 90%;
+  height: 392px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer {
+  width: 50%;
+  height: 392px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 30px 0;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer h4 {
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 186%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #d48a5c;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer h2 {
+  font-family: "ZCOOL XiaoWei";
+  font-weight: 400;
+  font-size: 29px;
+  line-height: 224%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #1c1a1a;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox {
+  margin: 10px;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox input {
+  width: 362px;
+  height: 40px;
+  background: #f4f1ee;
+  border: none;
+  padding-left: 10px;
+  outline: none;
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 186%;
+  letter-spacing: 0.04em;
+  color: #5c5c5c;
+  position: relative;
+  left: 15px;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox svg {
+  position: relative;
+  right: 20px;
+  top: 5px;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .btnContainer {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .btnContainer .bookTableBtn {
+  width: 155px;
+  height: 35px;
+  background: #232020;
+  border: none;
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 186%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+}/*# sourceMappingURL=customerFeedback.css.map */

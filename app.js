@@ -15,6 +15,10 @@ app.get(`/popularProduct`, (req, res)=>{
     res.sendFile(path.join(__dirname, `public`, `popularProduct`, `popularProduct.html`))
 })
 
+app.get(`/customerFeedback`, (req, res)=>{
+    res.sendFile(path.join(__dirname, `public`, `customerFeedback`, `customerFeedback.html`))
+})
+
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)
 });
