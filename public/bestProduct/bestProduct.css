@@ -1,0 +1,111 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.wrap {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f1ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap header {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 170px;
+}
+.wrap header nav a {
+  text-decoration: none;
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #000;
+  margin: 20px;
+}
+.wrap header .logo img {
+  width: 90px;
+}
+.wrap header .btnContainer i {
+  font-size: 20px;
+  color: #000;
+  margin: 35px;
+  cursor: pointer;
+}
+.wrap main {
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 180px;
+}
+.wrap main .textContainer {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .cardContainer {
+  width: 100%;
+  min-height: 75vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.wrap main .cardContainer .card {
+  border: 1px solid #fff;
+  width: 350px;
+  height: 454px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+}
+.wrap main .cardContainer .card .imgBox {
+  width: 303px;
+  height: 267px;
+  background: #13131a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .cardContainer .card .imgBox img {
+  margin-left: 20px;
+}
+.wrap main .cardContainer .card .rating {
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 162%;
+  letter-spacing: 0.04em;
+  color: #1c1a1a;
+}
+.wrap main .cardContainer .card h2 {
+  font-family: "ZCOOL XiaoWei";
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 271%;
+  letter-spacing: 0.04em;
+  color: #1c1a1a;
+}
+.wrap main .cardContainer .card p {
+  font-family: "Open Sans";
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 162%;
+  letter-spacing: 0.04em;
+  color: #1c1a1a;
+}
+.wrap main .cardContainer .card p span {
+  color: #eab665;
+}/*# sourceMappingURL=bestProduct.css.map */
