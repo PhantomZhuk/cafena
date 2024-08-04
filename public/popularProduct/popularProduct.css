@@ -45,7 +45,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 170px;
+  padding: 0 180px;
 }
 .wrap main .textContainer {
   width: 100%;
@@ -69,6 +69,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 30px;
 }
 .wrap main .popularCoffeeContainer .coffeeContainer img {
   width: 33%;
@@ -79,10 +80,23 @@
 .wrap main .popularCoffeeContainer .coffeeContainer h2 {
   position: relative;
   right: 30px;
+  font-family: "ZCOOL XiaoWei";
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 217%;
+  letter-spacing: 0.04em;
+  color: #232020;
 }
 .wrap main .popularCoffeeContainer .coffeeContainer .coffeePrise {
   position: relative;
   right: 30px;
   align-self: flex-end;
   margin-bottom: 10px;
+  font-family: "Open Sans";
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 130%;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #d48a5c;
 }/*# sourceMappingURL=popularProduct.css.map */
