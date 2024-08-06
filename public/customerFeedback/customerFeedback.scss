@@ -47,6 +47,25 @@
                 cursor: pointer;
             }
         }
+
+        .menuConatiner {
+            display: none;
+            position: absolute;
+            top: 11vh;
+            width: 300px;
+            height: 300px;
+            background-color: #fff;
+            border: 1px solid #d48a5c;
+            right: 180px;
+
+            nav {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     }
 
     main {
@@ -87,7 +106,7 @@
                     width: 60%;
                     font-family: 'Open Sans';
                     font-weight: 400;
-                    font-size: 20px;
+                    font-size: calc(14px + 0.5vw);
                     line-height: 150%;
                     letter-spacing: 0.04em;
                     text-align: center;
@@ -121,17 +140,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding-bottom: 50px;
 
             .reservationContainer {
-                width: 90%;
-                height: 392px;
+                width: 85%;
+                min-height: 392px;
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
 
+                img {
+                    width: 55%;
+                    max-height: 380px;
+                }
+
                 .bookingTableContainer {
-                    width: 50%;
-                    height: 392px;
+                    width: 45%;
+                    max-height: 380px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
@@ -142,7 +167,7 @@
                     h4 {
                         font-family: 'Open Sans';
                         font-weight: 400;
-                        font-size: 14px;
+                        font-size: calc(5px + 0.6vw);
                         line-height: 186%;
                         letter-spacing: 0.04em;
                         text-align: center;
@@ -152,7 +177,7 @@
                     h2 {
                         font-family: 'ZCOOL XiaoWei';
                         font-weight: 400;
-                        font-size: 29px;
+                        font-size: calc(14px + 0.8vw);
                         line-height: 224%;
                         letter-spacing: 0.04em;
                         text-align: center;
@@ -160,11 +185,21 @@
                     }
 
                     .inputContainer {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+
                         .inputBox {
+                            width: 100%;
                             margin: 10px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
 
                             input {
-                                width: 362px;
+                                width: 80%;
                                 height: 40px;
                                 background: #f4f1ee;
                                 border: none;
@@ -183,7 +218,6 @@
                             svg {
                                 position: relative;
                                 right: 20px;
-                                top: 5px;
                             }
                         }
                     }
@@ -216,7 +250,7 @@
 
     footer {
         width: 100%;
-        min-height: 60vh;
+        min-height: 50vh;
         background-color: #fff;
         display: flex;
         flex-direction: column;
@@ -225,7 +259,7 @@
 
         .topFooterContainer {
             width: 100%;
-            min-height: 50vh;
+            min-height: 40vh;
             padding: 80px 170px;
             display: flex;
             flex-direction: column;
@@ -237,6 +271,8 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                flex-wrap: wrap;
+                margin: 10px;
 
                 .phoneContainer,
                 .addressContainer,
@@ -250,6 +286,7 @@
                     line-height: 186%;
                     letter-spacing: 0.04em;
                     color: #1c1a1a;
+                    margin: 10px;
 
                     svg {
                         margin-right: 10px;
@@ -261,8 +298,11 @@
                 }
 
                 .emailInputContainer {
+                    position: relative;
+                    left: 16px;
+
                     input {
-                        width: 350px;
+                        width: 250px;
                         height: 40px;
                         background: #f2eae2;
                         border: none;
@@ -307,7 +347,7 @@
 
                 .socialNetworksContainer {
                     width: 100%;
-                    min-height: 20vh;
+                    max-height: 20vh;
                     display: flex;
                     justify-content: flex-end;
                     align-items: center;
@@ -338,6 +378,126 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+    }
+}
+
+@media screen and (max-width: 1450px) {
+    .wrap {
+        header {
+            padding: 0 50px;
+
+            .menuConatiner {
+                right: 50px;
+            }
+        }
+
+        main {
+            padding: 0 50px;
+        }
+
+        footer {
+            .topFooterContainer {
+                padding: 50px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1220px) {
+    .wrap {
+        header {
+            nav {
+                display: none;
+            }
+        }
+
+        main {
+            .reservationMainContainer {
+                .reservationContainer {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 910px) {
+    .wrap {
+        main {
+            .reservationMainContainer {
+                .reservationContainer {
+                    flex-direction: column;
+
+                    img {
+                        width: 100%;
+                    }
+
+                    .bookingTableContainer {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        footer {
+            .topFooterContainer {
+                .topContainer {
+                    .emailInputContainer {
+                        left: -16px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .wrap {
+        footer {
+            .topFooterContainer {
+                .bottomContainer {
+                    flex-direction: column;
+
+                    .textContainer {
+                        width: 100%;
+                        align-items: center;
+                    }
+
+                    .socialNetworksContainer {
+                        justify-content: center;
+                        padding-top: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .wrap {
+        header {
+            padding: 0 20px;
+
+            .btnContainer {
+                i {
+                    margin: 20px;
+                }
+            }
+
+            .menuConatiner {
+                right: 0px;
+            }
+        }
+
+        main {
+            padding: 0 20px;
+        }
+
+        footer {
+            .topFooterContainer {
+                padding: 50px 20px;
+            }
         }
     }
 }

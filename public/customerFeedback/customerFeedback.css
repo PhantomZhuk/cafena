@@ -39,6 +39,23 @@
   margin: 35px;
   cursor: pointer;
 }
+.wrap header .menuConatiner {
+  display: none;
+  position: absolute;
+  top: 11vh;
+  width: 300px;
+  height: 300px;
+  background-color: #fff;
+  border: 1px solid #d48a5c;
+  right: 180px;
+}
+.wrap header .menuConatiner nav {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .wrap main {
   width: 100%;
   min-height: 85vh;
@@ -75,7 +92,7 @@
   width: 60%;
   font-family: "Open Sans";
   font-weight: 400;
-  font-size: 20px;
+  font-size: calc(14px + 0.5vw);
   line-height: 150%;
   letter-spacing: 0.04em;
   text-align: center;
@@ -104,17 +121,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 50px;
 }
 .wrap main .reservationMainContainer .reservationContainer {
-  width: 90%;
-  height: 392px;
+  width: 85%;
+  min-height: 392px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
+.wrap main .reservationMainContainer .reservationContainer img {
+  width: 55%;
+  max-height: 380px;
+}
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer {
-  width: 50%;
-  height: 392px;
+  width: 45%;
+  max-height: 380px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -125,7 +147,7 @@
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer h4 {
   font-family: "Open Sans";
   font-weight: 400;
-  font-size: 14px;
+  font-size: calc(5px + 0.6vw);
   line-height: 186%;
   letter-spacing: 0.04em;
   text-align: center;
@@ -134,17 +156,28 @@
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer h2 {
   font-family: "ZCOOL XiaoWei";
   font-weight: 400;
-  font-size: 29px;
+  font-size: calc(14px + 0.8vw);
   line-height: 224%;
   letter-spacing: 0.04em;
   text-align: center;
   color: #1c1a1a;
 }
+.wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox {
+  width: 100%;
   margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox input {
-  width: 362px;
+  width: 80%;
   height: 40px;
   background: #f4f1ee;
   border: none;
@@ -162,7 +195,6 @@
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .inputContainer .inputBox svg {
   position: relative;
   right: 20px;
-  top: 5px;
 }
 .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer .btnContainer {
   height: 50px;
@@ -186,7 +218,7 @@
 }
 .wrap footer {
   width: 100%;
-  min-height: 60vh;
+  min-height: 50vh;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -195,7 +227,7 @@
 }
 .wrap footer .topFooterContainer {
   width: 100%;
-  min-height: 50vh;
+  min-height: 40vh;
   padding: 80px 170px;
   display: flex;
   flex-direction: column;
@@ -207,6 +239,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  margin: 10px;
 }
 .wrap footer .topFooterContainer .topContainer .phoneContainer,
 .wrap footer .topFooterContainer .topContainer .addressContainer,
@@ -220,6 +254,7 @@
   line-height: 186%;
   letter-spacing: 0.04em;
   color: #1c1a1a;
+  margin: 10px;
 }
 .wrap footer .topFooterContainer .topContainer .phoneContainer svg,
 .wrap footer .topFooterContainer .topContainer .addressContainer svg,
@@ -231,8 +266,12 @@
 .wrap footer .topFooterContainer .topContainer .emailInputContainer span {
   font-weight: 400;
 }
+.wrap footer .topFooterContainer .topContainer .emailInputContainer {
+  position: relative;
+  left: 16px;
+}
 .wrap footer .topFooterContainer .topContainer .emailInputContainer input {
-  width: 350px;
+  width: 250px;
   height: 40px;
   background: #f2eae2;
   border: none;
@@ -271,7 +310,7 @@
 }
 .wrap footer .topFooterContainer .bottomContainer .socialNetworksContainer {
   width: 100%;
-  min-height: 20vh;
+  max-height: 20vh;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -297,4 +336,71 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 1450px) {
+  .wrap header {
+    padding: 0 50px;
+  }
+  .wrap header .menuConatiner {
+    right: 50px;
+  }
+  .wrap main {
+    padding: 0 50px;
+  }
+  .wrap footer .topFooterContainer {
+    padding: 50px;
+  }
+}
+@media screen and (max-width: 1220px) {
+  .wrap header nav {
+    display: none;
+  }
+  .wrap main .reservationMainContainer .reservationContainer {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 910px) {
+  .wrap main .reservationMainContainer .reservationContainer {
+    flex-direction: column;
+  }
+  .wrap main .reservationMainContainer .reservationContainer img {
+    width: 100%;
+  }
+  .wrap main .reservationMainContainer .reservationContainer .bookingTableContainer {
+    width: 100%;
+  }
+  .wrap footer .topFooterContainer .topContainer .emailInputContainer {
+    left: -16px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .wrap footer .topFooterContainer .bottomContainer {
+    flex-direction: column;
+  }
+  .wrap footer .topFooterContainer .bottomContainer .textContainer {
+    width: 100%;
+    align-items: center;
+  }
+  .wrap footer .topFooterContainer .bottomContainer .socialNetworksContainer {
+    justify-content: center;
+    padding-top: 10px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .wrap header {
+    padding: 0 20px;
+  }
+  .wrap header .btnContainer i {
+    margin: 20px;
+  }
+  .wrap header .menuConatiner {
+    right: 0px;
+  }
+  .wrap main {
+    padding: 0 20px;
+  }
+  .wrap footer .topFooterContainer {
+    padding: 50px 20px;
+  }
 }/*# sourceMappingURL=customerFeedback.css.map */
