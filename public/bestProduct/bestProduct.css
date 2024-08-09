@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 170px;
+  padding: 0 100px;
 }
 .wrap header nav a {
   text-decoration: none;
@@ -36,7 +36,7 @@
 .wrap header .btnContainer i {
   font-size: 20px;
   color: #000;
-  margin: 35px;
+  margin: 20px;
   cursor: pointer;
 }
 .wrap header .menuConatiner {
@@ -47,7 +47,7 @@
   height: 300px;
   background-color: #fff;
   border: 1px solid #d48a5c;
-  right: 180px;
+  right: 100px;
 }
 .wrap header .menuConatiner nav {
   width: 100%;
@@ -62,7 +62,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 180px;
+  padding: 0 110px;
 }
 .wrap main .textContainer {
   width: 100%;
@@ -249,7 +249,7 @@
   align-items: center;
 }
 
-@media screen and (max-width: 1450px) {
+@media screen and (max-width: 1350px) {
   .wrap header {
     padding: 0 50px;
   }

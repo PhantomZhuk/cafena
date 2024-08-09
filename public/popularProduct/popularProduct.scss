@@ -18,7 +18,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 170px;
+        padding: 0 100px;
 
         nav {
             a {
@@ -43,7 +43,7 @@
             i {
                 font-size: 20px;
                 color: #000;
-                margin: 35px;
+                margin: 20px;
                 cursor: pointer;
             }
         }
@@ -56,7 +56,7 @@
             height: 300px;
             background-color: #fff;
             border: 1px solid #d48a5c;
-            right: 180px;
+            right: 100px;
             z-index: 100;
 
             nav {
@@ -75,7 +75,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 0 180px;
+        padding: 0 110px;
 
         .textContainer {
             width: 100%;
@@ -271,7 +271,7 @@
     }
 }
 
-@media screen and (max-width: 1450px) {
+@media screen and (max-width: 1350px) {
     .wrap {
         header {
             padding: 0 50px;
