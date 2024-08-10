@@ -1,11 +1,13 @@
 const express = require(`express`);
 const path = require(`path`);
-
+const bodyParser = require(`body-parser`)
+const fs = require(`fs`)
 const app = express();
 
 const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, `public`)))
+app.use(bodyParser.json());
 
 app.get(`/home`, (req, res)=>{
     res.sendFile(path.join(__dirname, `public`, `index.html`))
@@ -32,7 +34,7 @@ app.get('/client', (req, res) => {
     if (!loggedIn) {
         return res.redirect('/authentication');
     }else if (loggedIn){
-        return res.redirect('/user');
+        return res.redirect('/profile');
     }
 });
 
@@ -40,9 +42,50 @@ app.get('/authentication', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Authentication', 'authentication.html'));
 });
 
-app.get('/user', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'user', 'user.html'));
+app.get('/profile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'profile', 'profile.html'));
+    loggedIn = true;
 });
+
+
+app.post(`/signup`, (req, res)=>{
+    let {login, email,password} = req.body
+    let data = {
+        login,
+        email,
+        password
+    }
+    fs.appendFile(`users.txt`, JSON.stringify(data) + `\n`, (err)=>{
+        if(err){
+            console.log(err)
+            return res.status(500).send(`internal server error`);
+        }
+
+        res.status(201).send(`User data save sucessfully`);
+    })
+})
+
+app.post(`/signin`, (req, res)=>{
+    let {email,password} = req.body
+    let signup = false;
+    fs.readFile(`users.txt`, `utf8`, (err, data)=>{
+        if(err){
+            console.log(err)
+            return res.status(500).send(`internal server error`);
+        }
+
+        let users = data.split(`\n`)
+        for(let el = 0; el<users.length-1; el++){
+            if(JSON.parse(users[el]).email == email && JSON.parse(users[el]).password == password){
+                signup = true
+            }
+        }
+    })
+
+    setTimeout(()=>{
+        res.send(signup);
+    },1000)
+})
 
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)

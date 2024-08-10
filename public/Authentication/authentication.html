@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,11 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js'
         integrity='sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=='
         crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.3/axios.js'
+        integrity='sha512-wyGoNLfPOtJkLO6wwG6p+XIlEfR0+HNi0cDOlqjmrPQkTt/MON/HWKXldFwWgrpvTTBceDQ57POeojT62HOFVw=='
+        crossorigin='anonymous'></script>
 </head>
+
 <body>
     <div class="wrap">
         <div class="authenticationFormContainer">
@@ -25,19 +30,20 @@
                 <button id="lognIn">Logn in</button>
             </div>
             <div class="lognUpContainer">
-                <input type="text" id="login" placeholder="Login">
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Password">
+                <input type="text" id="loginUp" placeholder="Login">
+                <input type="email" id="emailUp" placeholder="Email">
+                <input type="password" id="passwordUp" placeholder="Password">
                 <button id="lognUpBtn">Logn up</button>
             </div>
             <div class="lognInContainer">
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Password">
-                <button id="lognUpBtn">Logn in</button>
+                <input type="email" id="emailIn" placeholder="Email">
+                <input type="password" id="passwordIn" placeholder="Password">
+                <button id="lognInBtn">Logn in</button>
             </div>
         </div>
     </div>
 
     <script src="./authentication.js"></script>
 </body>
+
 </html>
