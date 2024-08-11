@@ -98,8 +98,8 @@
             align-items: center;
 
             .accountInformationContainer {
-                width: 50%;
-                height: 80%;
+                width: 500px;
+                height: 500px;
                 background-color: #fff;
                 border-radius: 20px;
                 display: flex;
@@ -149,6 +149,77 @@
                     }
                 }
             }
+        }
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    .wrap {
+        header {
+            padding: 0 50px;
+
+            .menuConatiner {
+                right: 50px;
+            }   
+        }
+
+        main {
+            padding: 0 50px;
+        }
+    }
+}
+
+@media screen and (max-width: 1210px) {
+    .wrap {
+        header {
+            nav {
+                display: none;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .wrap {
+        main {
+            flex-direction: column;
+
+            .imgContainer {
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                height: 15vh;
+                padding-top: 100px;
+
+                img {
+                    width: 200px;
+                }
+            }
+
+            .profileContainer {
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .wrap {
+        header {
+            padding: 0 20px;
+            .btnContainer {
+                i {
+                    margin: 20px;
+                }
+            }
+
+            .menuConatiner {
+                right: 0px;
+            }
+        }
+        
+        main {
+            padding: 0 20px 50px 20px;
         }
     }
 }
