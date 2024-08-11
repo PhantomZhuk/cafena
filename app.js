@@ -9,23 +9,23 @@ const PORT = 3000;
 app.use(express.static(path.join(__dirname, `public`)))
 app.use(bodyParser.json());
 
-app.get(`/home`, (req, res)=>{
+app.get(`/home`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `index.html`))
 })
 
-app.get(`/popularProduct`, (req, res)=>{
+app.get(`/popularProduct`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `popularProduct`, `popularProduct.html`))
 })
 
-app.get(`/customerFeedback`, (req, res)=>{
+app.get(`/customerFeedback`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `customerFeedback`, `customerFeedback.html`))
 })
 
-app.get(`/bestProduct`, (req, res)=>{
+app.get(`/bestProduct`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `bestProduct`, `bestProduct.html`))
 })
 
-app.get(`/blog`, (req, res)=>{
+app.get(`/blog`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `blog`, `blog.html`))
 })
 
@@ -33,7 +33,7 @@ let loggedIn = false;
 app.get('/client', (req, res) => {
     if (!loggedIn) {
         return res.redirect('/authentication');
-    }else if (loggedIn){
+    } else if (loggedIn) {
         return res.redirect('/profile');
     }
 });
@@ -47,16 +47,25 @@ app.get('/profile', (req, res) => {
     loggedIn = true;
 });
 
+let user = {};
+app.get('/userData', (req, res) => {
+    res.json({
+        login: user.login,
+        email: user.email,
+        password: user.password
+    });
+});
 
-app.post(`/signup`, (req, res)=>{
-    let {login, email,password} = req.body
+
+app.post(`/signup`, (req, res) => {
+    let { login, email, password } = req.body
     let data = {
         login,
         email,
         password
     }
-    fs.appendFile(`users.txt`, JSON.stringify(data) + `\n`, (err)=>{
-        if(err){
+    fs.appendFile(`users.txt`, JSON.stringify(data) + `\n`, (err) => {
+        if (err) {
             console.log(err)
             return res.status(500).send(`internal server error`);
         }
@@ -65,26 +74,31 @@ app.post(`/signup`, (req, res)=>{
     })
 })
 
-app.post(`/signin`, (req, res)=>{
-    let {email,password} = req.body
+app.post(`/signin`, (req, res) => {
+    let { email, password } = req.body
     let signup = false;
-    fs.readFile(`users.txt`, `utf8`, (err, data)=>{
-        if(err){
+    fs.readFile(`users.txt`, `utf8`, (err, data) => {
+        if (err) {
             console.log(err)
             return res.status(500).send(`internal server error`);
         }
 
         let users = data.split(`\n`)
-        for(let el = 0; el<users.length-1; el++){
-            if(JSON.parse(users[el]).email == email && JSON.parse(users[el]).password == password){
+        for (let el = 0; el < users.length - 1; el++) {
+            if (JSON.parse(users[el]).email == email && JSON.parse(users[el]).password == password) {
                 signup = true
+                user = {
+                    login: JSON.parse(users[el]).login,
+                    email: JSON.parse(users[el]).email,
+                    password: JSON.parse(users[el]).password
+                };
             }
         }
     })
 
-    setTimeout(()=>{
+    setTimeout(() => {
         res.send(signup);
-    },1000)
+    }, 1000)
 })
 
 app.listen(PORT, () => {

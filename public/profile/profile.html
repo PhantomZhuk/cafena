@@ -17,6 +17,9 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js'
         integrity='sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=='
         crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.3/axios.js'
+        integrity='sha512-wyGoNLfPOtJkLO6wwG6p+XIlEfR0+HNi0cDOlqjmrPQkTt/MON/HWKXldFwWgrpvTTBceDQ57POeojT62HOFVw=='
+        crossorigin='anonymous'></script>
 </head>
 
 <body>
@@ -58,14 +61,14 @@
                 <div class="accountInformationContainer">
                     <div class="loginInputContainer">
                         <input type="text" id="login">
-                        <i class="fa-regular fa-pen-to-square"></i>
+                        <i class="fa-regular fa-pen-to-square" id="unlockLogin"></i>
                     </div>
                     <div class="emailContainer">
-                        <input type="email" id="email" disabled>
+                        <input type="email" id="email">
                     </div>
                     <div class="passwordInputContainer">
                         <input type="password" id="password">
-                        <i class="fa-regular fa-pen-to-square"></i>
+                        <i class="fa-regular fa-pen-to-square" id="unlockPassword"></i>
                     </div>
                     <div class="btnContainer">
                         <button id="save">Save</button>
