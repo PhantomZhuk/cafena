@@ -9,3 +9,17 @@ $(`.fa-bars`).click(()=>{
         menuOpen = false;
     }
 });
+
+$(`#subscribeBtn`).click(() => {
+    let data = {    
+        email: $(`#emailSubscriber`).val(),
+    }
+
+    $(`#emailSubscriber`).val(``);
+
+    axios.post(`http://localhost:3000/subscribe`, data)
+        .then(res => {
+            console.log(res);
+            window.location.href = `http://localhost:3000/home`;
+        })
+});

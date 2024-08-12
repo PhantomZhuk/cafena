@@ -101,6 +101,22 @@ app.post(`/signin`, (req, res) => {
     }, 1000)
 })
 
+app.post(`/subscribe`, (req, res) => {
+    let {email} = req.body
+    let data = {
+        email
+    }
+
+    fs.appendFile(`subscribers.txt`, JSON.stringify(data) + `\n`, (err) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).send(`internal server error`);
+        }
+
+        res.status(201).send(`User data save sucessfully`);
+    })
+})
+
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)
 });
