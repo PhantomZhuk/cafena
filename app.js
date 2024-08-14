@@ -32,14 +32,14 @@ app.get(`/blog`, (req, res) => {
 let loggedIn = false;
 app.get('/client', (req, res) => {
     if (!loggedIn) {
-        return res.redirect('/authentication');
+        return res.redirect('/aus');
     } else if (loggedIn) {
         return res.redirect('/profile');
     }
 });
 
-app.get('/authentication', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'authentication', 'identification.html'));
+app.get('/aus', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'aus', 'identification.html'));
 });
 
 app.get('/profile', (req, res) => {
