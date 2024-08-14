@@ -39,7 +39,7 @@ app.get('/client', (req, res) => {
 });
 
 app.get('/authentication', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'Authentication', 'identification.html'));
+    res.sendFile(path.join(__dirname, 'public', 'authentication', 'identification.html'));
 });
 
 app.get('/profile', (req, res) => {
