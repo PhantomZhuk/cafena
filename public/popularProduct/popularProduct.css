@@ -80,6 +80,7 @@
   justify-content: space-between;
 }
 .wrap main .popularCoffeeContainer .coffeeContainer {
+  position: relative;
   border: 3px solid #414141;
   width: 475px;
   height: 115px;
@@ -94,6 +95,7 @@
   border-radius: 50%;
   position: relative;
   right: 50px;
+  z-index: 3;
 }
 .wrap main .popularCoffeeContainer .coffeeContainer h2 {
   position: relative;
@@ -117,6 +119,24 @@
   letter-spacing: 0.04em;
   text-align: center;
   color: #d48a5c;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer .btnContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(89, 89, 89, 0.7);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .popularCoffeeContainer .coffeeContainer .btnContainer button {
+  margin-left: 50px;
+  padding: 12px 52px;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
 }
 .wrap footer {
   width: 100%;
@@ -261,6 +281,9 @@
   .wrap main .popularCoffeeContainer .coffeeContainer {
     width: 350px;
   }
+  .wrap main .popularCoffeeContainer .coffeeContainer .btnContainer {
+    width: 345px;
+  }
 }
 @media screen and (max-width: 1000px) {
   .wrap main .popularCoffeeContainer {
@@ -273,6 +296,9 @@
   }
 }
 @media screen and (max-width: 700px) {
+  .wrap main .popularCoffeeContainer .coffeeContainer {
+    margin: 30px 0 30px 30px;
+  }
   .wrap footer .topFooterContainer .bottomContainer {
     flex-direction: column;
   }
@@ -297,6 +323,9 @@
   }
   .wrap main {
     padding: 0 20px;
+  }
+  .wrap main .popularCoffeeContainer .coffeeContainer {
+    height: 90px;
   }
   .wrap footer .topFooterContainer {
     padding: 50px 20px;

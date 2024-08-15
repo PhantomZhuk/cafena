@@ -133,16 +133,31 @@
                     color: #1c1a1a;
                 }
 
-                p {
-                    font-family: 'Open Sans';
-                    font-weight: 600;
-                    font-size: 16px;
-                    line-height: 162%;
-                    letter-spacing: 0.04em;
-                    color: #1c1a1a;
+                .priceAndBtnContainer {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
 
-                    span {
-                        color: #eab665;
+                    p {
+                        font-family: 'Open Sans';
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 162%;
+                        letter-spacing: 0.04em;
+                        color: #1c1a1a;
+    
+                        span {
+                            color: #eab665;
+                        }
+                    }
+
+                    button {
+                        padding: 10px 42px;
+                        border-radius: 5px;
+                        background-color: #000;
+                        border: none;
+                        color: #fff;
+                        cursor: pointer;
                     }
                 }
             }

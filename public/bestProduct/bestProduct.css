@@ -116,7 +116,12 @@
   letter-spacing: 0.04em;
   color: #1c1a1a;
 }
-.wrap main .cardContainer .card p {
+.wrap main .cardContainer .card .priceAndBtnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.wrap main .cardContainer .card .priceAndBtnContainer p {
   font-family: "Open Sans";
   font-weight: 600;
   font-size: 16px;
@@ -124,8 +129,16 @@
   letter-spacing: 0.04em;
   color: #1c1a1a;
 }
-.wrap main .cardContainer .card p span {
+.wrap main .cardContainer .card .priceAndBtnContainer p span {
   color: #eab665;
+}
+.wrap main .cardContainer .card .priceAndBtnContainer button {
+  padding: 10px 42px;
+  border-radius: 5px;
+  background-color: #000;
+  border: none;
+  color: #fff;
+  cursor: pointer;
 }
 .wrap footer {
   width: 100%;

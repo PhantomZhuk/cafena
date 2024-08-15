@@ -93,6 +93,7 @@
             justify-content: space-between;
 
             .coffeeContainer {
+                position: relative;
                 border: 3px solid #414141;
                 width: 475px;
                 height: 115px;
@@ -107,6 +108,7 @@
                     border-radius: 50%;
                     position: relative;
                     right: 50px;
+                    z-index: 3;
                 }
 
                 h2 {
@@ -132,6 +134,26 @@
                     letter-spacing: 0.04em;
                     text-align: center;
                     color: #d48a5c;
+                }
+
+                .btnContainer {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    background-color: rgba(89, 89, 89, 0.7);
+                    z-index: 2;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+
+                    button {
+                        margin-left: 50px;
+                        padding: 12px 52px;
+                        border-radius: 5px;
+                        background-color: #000;
+                        color: #fff;
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -306,6 +328,10 @@
 
                 .coffeeContainer {
                     width: 350px;
+
+                    .btnContainer {
+                        width: 345px;
+                    }
                 }
             }
         }
@@ -338,6 +364,14 @@
 
 @media screen and (max-width: 700px) {
     .wrap {
+        main {
+            .popularCoffeeContainer {
+                .coffeeContainer {
+                    margin: 30px 0 30px 30px;
+                }
+            }
+        }
+
         footer {
             .topFooterContainer {
                 .bottomContainer {
@@ -376,6 +410,12 @@
 
         main {
             padding: 0 20px;
+
+            .popularCoffeeContainer {
+                .coffeeContainer {
+                    height: 90px;
+                }
+            }
         }
 
         footer {
