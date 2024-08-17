@@ -65,6 +65,107 @@
   align-items: center;
   padding: 0 110px;
 }
+.wrap main .cartContainer {
+  position: absolute;
+  width: 350px;
+  height: 100vh;
+  background-color: #fff;
+  right: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.wrap main .cartContainer .cartHeader {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 25px;
+}
+.wrap main .cartContainer .cartHeader i {
+  font-size: 24px;
+  cursor: pointer;
+}
+.wrap main .cartContainer .productContainer {
+  width: 100%;
+  height: 85vh;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 20px;
+}
+.wrap main .cartContainer .productContainer .productInCart {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f1ee;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+.wrap main .cartContainer .productContainer .productInCart img {
+  height: 150px;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer {
+  width: 70%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer .name {
+  font-size: 16px;
+  font-weight: 600;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 0 20px;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock .price {
+  color: #4f3e22;
+  font-weight: 700;
+  font-size: 16px;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock .quantityProductContainer {
+  width: 60%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 1px 3px #fff;
+  padding: 5px;
+}
+.wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock .quantityProductContainer .btnPlusProduct,
+.wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock .quantityProductContainer .btnMinusProduct {
+  cursor: pointer;
+}
+.wrap main .cartContainer .btnContainer {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .cartContainer .btnContainer button {
+  padding: 10px 52px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  font-size: 15px;
+  border-radius: 5px;
+}
 .wrap main .textContainer {
   width: 100%;
   height: 10vh;

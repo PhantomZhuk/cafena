@@ -43,4 +43,12 @@ function loadingProducts() {
         })
 }
 
-loadingProducts()
+loadingProducts();
+
+$(`.fa-basket-shopping`).click(()=>{
+    $(`.cartContainer`).css(`display`, `flex`);
+});
+
+$(`.fa-xmark`).click(()=>{
+    $(`.cartContainer`).css(`display`, `none`);
+});
