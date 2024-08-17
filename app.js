@@ -8,6 +8,10 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, `public`)))
 app.use(bodyParser.json());
+app.use(express.json());
+
+const goodsRouter = require(`./router/goods`)
+app.use(`/api/goods`, goodsRouter);
 
 app.get(`/home`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `index.html`))
@@ -102,7 +106,7 @@ app.post(`/signin`, (req, res) => {
 })
 
 app.post(`/subscribe`, (req, res) => {
-    let {email} = req.body
+    let {email} = req.body;
     let data = {
         email
     }

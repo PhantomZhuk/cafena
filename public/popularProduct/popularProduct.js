@@ -1,53 +1,46 @@
 let menuOpen = false;
 
-$(`.fa-bars`).click(()=>{
-    if(menuOpen == false){
+$(`.fa-bars`).click(() => {
+    if (menuOpen == false) {
         $(`.menuConatiner`).css(`display`, `flex`);
         menuOpen = true;
-    }else {
+    } else {
         $(`.menuConatiner`).css(`display`, `none`);
         menuOpen = false;
     }
 });
 
-$(`.coffeeContainer1`).hover(()=>{
-        $(`.btnContainer1`).css(`display`, `flex`)
-},
-()=>{
-    $(`.btnContainer1`).css(`display`, `none`)
-})
+$(document).on('mouseenter', '.coffeeContainer', function() {
+    $(this).find('.btnContainer').css('display', 'flex');
+});
 
-$(`.coffeeContainer2`).hover(()=>{
-    $(`.btnContainer2`).css(`display`, `flex`)
-},
-()=>{
-$(`.btnContainer2`).css(`display`, `none`)
-})
+$(document).on('mouseleave', '.coffeeContainer', function() {
+    $(this).find('.btnContainer').css('display', 'none');
+});
 
-$(`.coffeeContainer3`).hover(()=>{
-    $(`.btnContainer3`).css(`display`, `flex`)
-},
-()=>{
-$(`.btnContainer3`).css(`display`, `none`)
-})
+function loadingProducts() {
+    axios.get(`/api/goods`)
+        .then(res => {
+            const data = res.data;
+            console.log(data);
 
-$(`.coffeeContainer4`).hover(()=>{
-    $(`.btnContainer4`).css(`display`, `flex`)
-},
-()=>{
-$(`.btnContainer4`).css(`display`, `none`)
-})
+            for (el of data) {
+                if (el.category == "popular"){
+                    $(`.popularCoffeeContainer`).append(
+                        `
+                        <div class="coffeeContainer">
+                            <img src="./${el.img}" alt="coffee">
+                            <h2>${el.name}</h2>
+                            <div class="coffeePrise">$${el.price}</div>
+                            <div class="btnContainer">
+                                <button id="${el.id}" class="btnBuy">Buy</button>
+                            </div>
+                    </div>
+                    `
+                    )
+                }
+            }
+        })
+}
 
-$(`.coffeeContainer5`).hover(()=>{
-    $(`.btnContainer5`).css(`display`, `flex`)
-},
-()=>{
-$(`.btnContainer5`).css(`display`, `none`)
-})
-
-$(`.coffeeContainer6`).hover(()=>{
-    $(`.btnContainer6`).css(`display`, `flex`)
-},
-()=>{
-$(`.btnContainer6`).css(`display`, `none`)
-})
+loadingProducts()
