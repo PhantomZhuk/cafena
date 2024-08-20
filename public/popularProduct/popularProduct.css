@@ -76,6 +76,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 }
 .wrap main .cartContainer .cartHeader {
   width: 100%;
@@ -108,7 +109,7 @@
   margin: 10px 0;
 }
 .wrap main .cartContainer .productContainer .productInCart img {
-  height: 150px;
+  height: 100px;
 }
 .wrap main .cartContainer .productContainer .productInCart .textContainer {
   width: 70%;

@@ -10,8 +10,8 @@ app.use(express.static(path.join(__dirname, `public`)))
 app.use(bodyParser.json());
 app.use(express.json());
 
-const goodsRouter = require(`./router/goods`)
-app.use(`/api/goods`, goodsRouter);
+const goodsRouter = require('./router/goods');
+app.use('/api/goods', goodsRouter);
 
 app.get(`/home`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `index.html`))

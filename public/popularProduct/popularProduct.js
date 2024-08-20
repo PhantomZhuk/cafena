@@ -10,11 +10,11 @@ $(`.fa-bars`).click(() => {
     }
 });
 
-$(document).on('mouseenter', '.coffeeContainer', function() {
+$(document).on('mouseenter', '.coffeeContainer', function () {
     $(this).find('.btnContainer').css('display', 'flex');
 });
 
-$(document).on('mouseleave', '.coffeeContainer', function() {
+$(document).on('mouseleave', '.coffeeContainer', function () {
     $(this).find('.btnContainer').css('display', 'none');
 });
 
@@ -22,10 +22,9 @@ function loadingProducts() {
     axios.get(`/api/goods`)
         .then(res => {
             const data = res.data;
-            console.log(data);
 
             for (el of data) {
-                if (el.category == "popular"){
+                if (el.category == "popular") {
                     $(`.popularCoffeeContainer`).append(
                         `
                         <div class="coffeeContainer">
@@ -45,10 +44,58 @@ function loadingProducts() {
 
 loadingProducts();
 
-$(`.fa-basket-shopping`).click(()=>{
+$(`.fa-basket-shopping`).click(() => {
     $(`.cartContainer`).css(`display`, `flex`);
 });
 
-$(`.fa-xmark`).click(()=>{
+$(`.fa-xmark`).click(() => {
     $(`.cartContainer`).css(`display`, `none`);
+});
+
+$(`.wrap`).click((e) => {
+    const productId = e.target.id;
+    const quantity = 1;
+
+    axios.post(`http://localhost:3000/api/goods/order`, { productId, quantity })
+        .then(res => {
+            console.log(res.data.message);
+            console.log('Order response:', res.data);
+        })
+
+    axios.get(`/api/goods/unformalizedOrders`)
+        .then(res => {
+            const data = res.data;
+            $(`.productContainer`).empty();
+
+            for (el of data) {
+                $(`.productContainer`).append(
+                    `
+                        <div class="productInCart">
+                        <img src="./${el.img}" alt="photo">
+                        <div class="textContainer">
+                            <h4 class="name">${el.name}</h4>
+                            <div class="bottomBlock">
+                                <div class="quantityProductContainer">
+                                    <div class="btnPlusProduct"><i class="fa-solid fa-plus"></i></div>
+                                    <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity}</div>
+                                    <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
+                                </div>
+                                <p class="price">${el.price * el.quantity}$</p>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                )
+            }
+        });
+});
+
+$('.productContainer').on('click', '.fa-minus', (e) => {
+    let ID = $(e.target).attr('id').replace('minus', '');
+    let quantity = $(`#quantityProduct${ID}`).text();
+
+    axios.post(`http://localhost:3000/api/goods/order/reduceNumber`, { ID, quantity})
+        .then(res => {
+            console.log(res.data.message);
+        })
 });
