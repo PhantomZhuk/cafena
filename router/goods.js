@@ -56,14 +56,7 @@ router.post(`/order`, (req, res) => {
         }
 
         const products = JSON.parse(data);
-        let product;
-
-        for (let el of products) {
-            if (el.id == productId) {
-                product = { ...el };
-                break;
-            }
-        }
+        let product = products.find(el => el.id == productId);
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
@@ -98,6 +91,7 @@ router.post(`/order`, (req, res) => {
     });
 });
 
+
 router.post(`/order/confirm`, (req, res) => {
     const { orderId } = req.body;
 
@@ -125,29 +119,36 @@ router.post(`/order/confirm`, (req, res) => {
     });
 });
 
-router.post(`/order/reduceNumber`, (req, res) => {
-    const { orderId, quantity } = req.body;
+router.post('/order/reduceNumber', (req, res) => {
+    const { productId, quantity } = req.body;
 
-    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+    fs.readFile(ordersFilePath, 'utf8', (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
         }
 
         const orders = JSON.parse(data);
-        let order = orders.find(order => order.orderId == orderId);
+        const orderIndex = orders.findIndex(order => order.id == productId);
 
-        if (!order) {
+        if (orderIndex === -1) {
             return res.status(404).json({ error: 'Order not found' });
         }
 
+        let order = orders[orderIndex];
         order.quantity -= quantity;
 
-        fs.writeFile(ordersFilePath, JSON.stringify(orders), `utf8`, err => {
+        if (order.quantity <= 0) {
+            orders.splice(orderIndex, 1); // Видалення замовлення
+        } else {
+            orders[orderIndex] = order;
+        }
+
+        fs.writeFile(ordersFilePath, JSON.stringify(orders), 'utf8', err => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to write to orders file' });
             }
 
-            res.json({ message: 'Order confirmed successfully' });
+            res.json({ message: 'Order updated successfully' });
         });
     });
 });
