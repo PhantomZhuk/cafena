@@ -117,7 +117,7 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
                     quantityElement.text(quantity - 1);
                 }
                 console.log(res.data.message);
-                updateCart(); // Оновлення корзини
+                updateCart();
             })
             .catch(err => {
                 console.error('Error reducing quantity:', err);

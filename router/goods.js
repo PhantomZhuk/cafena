@@ -138,7 +138,7 @@ router.post('/order/reduceNumber', (req, res) => {
         order.quantity -= quantity;
 
         if (order.quantity <= 0) {
-            orders.splice(orderIndex, 1); // Видалення замовлення
+            orders.splice(orderIndex, 1);
         } else {
             orders[orderIndex] = order;
         }
