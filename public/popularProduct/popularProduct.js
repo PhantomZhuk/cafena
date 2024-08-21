@@ -140,3 +140,17 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
             console.error('Error adding quantity:', err);
         });
 });
+
+$(`#buyBtn`).click(()=>{
+    axios.post(`/api/goods/order/confirm`)
+    .then(res=>{
+        console.log(res.data.message);
+        return axios.get(`/api/goods/unformalizedOrders`);
+    })
+    .then(res => {
+        updateCart();
+    })
+    .catch(err => {
+        console.error('Error confirming orders:', err);
+    });
+});

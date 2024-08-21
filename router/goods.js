@@ -46,7 +46,7 @@ router.get(`/orders`, (req, res)=>{
 });
 
 router.post(`/order`, (req, res) => {
-    console.log('Received order request:', req.body); 
+    console.log('Received order request:', req.body);
     const { productId, quantity } = req.body;
 
     fs.readFile(productsFilePath, `utf8`, (err, data) => {
@@ -68,16 +68,19 @@ router.post(`/order`, (req, res) => {
             }
 
             const orders = JSON.parse(data);
-            let existingOrder = orders.find(order => order.id == productId);
+            let existingOrder = orders.find(order => order.id == productId && !order.orderConfirmed);
 
             if (existingOrder) {
                 existingOrder.quantity += quantity;
             } else {
-                product.orderConfirmed = false;
-                product.quantity = quantity;
-                product.orderDate = new Date().toLocaleString();
-                product.orderId = new Date().toISOString().replace(/\D/g, '').slice(0, -3);
-                orders.push(product);
+                let newOrder = {
+                    ...product,
+                    orderConfirmed: false,
+                    quantity: quantity,
+                    orderDate: new Date().toLocaleString(),
+                    orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3)
+                };
+                orders.push(newOrder);
             }
 
             fs.writeFile(ordersFilePath, JSON.stringify(orders), `utf8`, err => {
@@ -92,29 +95,26 @@ router.post(`/order`, (req, res) => {
 });
 
 
-router.post(`/order/confirm`, (req, res) => {
-    const { orderId } = req.body;
 
+router.post(`/order/confirm`, (req, res) => {
     fs.readFile(ordersFilePath, `utf8`, (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
         }
 
-        const orders = JSON.parse(data);
-        let order = orders.find(order => order.orderId == orderId);
+        let orders = JSON.parse(data);
 
-        if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-
-        order.orderConfirmed = true;
+        orders = orders.map(order => {
+            order.orderConfirmed = true;
+            return order;
+        });
 
         fs.writeFile(ordersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to write to orders file' });
             }
 
-            res.json({ message: 'Order confirmed successfully' });
+            res.json({ message: 'All orders confirmed successfully' });
         });
     });
 });
@@ -128,7 +128,7 @@ router.post('/order/reduceNumber', (req, res) => {
         }
 
         const orders = JSON.parse(data);
-        const orderIndex = orders.findIndex(order => order.id == productId);
+        const orderIndex = orders.findIndex(order => order.id == productId && !order.orderConfirmed);
 
         if (orderIndex === -1) {
             return res.status(404).json({ error: 'Order not found' });
@@ -152,6 +152,7 @@ router.post('/order/reduceNumber', (req, res) => {
         });
     });
 });
+
 
 
 
