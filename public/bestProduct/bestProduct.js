@@ -74,7 +74,7 @@ $(`.fa-xmark`).click(()=>{
 });
 
 function updateCart() {
-    axios.get(`http://localhost:3000/api/goods/unformalizedOrders`)
+    axios.get(`/api/goods/unformalizedOrders`)
         .then(res => {
             const data = res.data;
             $('.productContainer').empty();
@@ -112,7 +112,7 @@ $(`.cardContainer`).click((e) => {
     const quantity = 1;
     console.log(productId)
 
-    axios.post(`http://localhost:3000/api/goods/order`, { productId, quantity })
+    axios.post(`/api/goods/order`, { productId, quantity })
         .then(res => {
             console.log(res.data.message);
             return axios.get(`/api/goods/unformalizedOrders`);
@@ -131,7 +131,7 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
     let quantity = parseInt(quantityElement.text());
 
     if (quantity > 0) {
-        axios.post(`http://localhost:3000/api/goods/order/reduceNumber`, { productId, quantity: 1 })
+        axios.post(`/api/goods/order/reduceNumber`, { productId, quantity: 1 })
             .then(res => {
                 if (quantity - 1 === 0) {
                     quantityElement.closest('.productInCart').remove();
@@ -152,7 +152,7 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
     let quantityElement = $(e.target).closest('.productContainer').find(`#quantityProduct${productId}`);
     let quantity = parseInt(quantityElement.text());
 
-    axios.post(`http://localhost:3000/api/goods/order`, { productId, quantity: 1 })
+    axios.post(`/api/goods/order`, { productId, quantity: 1 })
         .then(res => {
             quantityElement.text(quantity + 1);
             console.log(res.data.message);
