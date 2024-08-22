@@ -17,10 +17,25 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js'
         integrity='sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=='
         crossorigin='anonymous'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.js' integrity='sha512-HIcdQKr9Ts5iol6pF0Ud9t0kLPk0PbqDFuVwWqz36SE+AEaGGaUToHJ8FighPFDECLsMADbmmX4bj7w3ObJN1Q==' crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.js'
+        integrity='sha512-HIcdQKr9Ts5iol6pF0Ud9t0kLPk0PbqDFuVwWqz36SE+AEaGGaUToHJ8FighPFDECLsMADbmmX4bj7w3ObJN1Q=='
+        crossorigin='anonymous'></script>
 </head>
 
 <body>
+
+    <div class="orderVerificationPopup">
+        <div class="emailInputContainer">
+            <h2>Please enter your email to confirm your order!</h2>
+            <input type="email" id="emailIn" placeholder="Email">
+            <button id="sendEmailBtn">Send email</button>
+        </div>
+        <svg class="animate" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 18 32.34 l -8.34 -8.34 -2.83 2.83 11.17 11.17 24 -24 -2.83 -2.83 z" stroke="#3da35a"
+                fill="transparent" />
+        </svg>
+    </div>
+
     <div class="wrap">
         <header>
             <nav class="leftNav">

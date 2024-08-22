@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { error } = require('console');
+const e = require('express');
 const router = express.Router();
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
@@ -46,7 +47,6 @@ router.get(`/orders`, (req, res)=>{
 });
 
 router.post(`/order`, (req, res) => {
-    console.log('Received order request:', req.body);
     const { productId, quantity } = req.body;
 
     fs.readFile(productsFilePath, `utf8`, (err, data) => {
@@ -97,6 +97,7 @@ router.post(`/order`, (req, res) => {
 
 
 router.post(`/order/confirm`, (req, res) => {
+    const { email } = req.body;
     fs.readFile(ordersFilePath, `utf8`, (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
@@ -106,6 +107,7 @@ router.post(`/order/confirm`, (req, res) => {
 
         orders = orders.map(order => {
             order.orderConfirmed = true;
+            order.email = email;
             return order;
         });
 

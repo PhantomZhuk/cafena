@@ -1,1 +1,0 @@
-{"login":"Max","email":"bitmaksum550@gmail.com","password":"rtecord"}
