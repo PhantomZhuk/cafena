@@ -42,7 +42,8 @@ router.get(`/orders`, (req, res)=>{
             res.status(500).json({error: 'Unable to read product file'})
         }
         const orders = JSON.parse(data)
-        res.json(orders);
+        const Orders = orders.filter(order => order.orderConfirmed);
+        res.json(Orders);
     })
 });
 
@@ -98,6 +99,7 @@ router.post(`/order`, (req, res) => {
 
 router.post(`/order/confirm`, (req, res) => {
     const { email } = req.body;
+    
     fs.readFile(ordersFilePath, `utf8`, (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
@@ -106,8 +108,10 @@ router.post(`/order/confirm`, (req, res) => {
         let orders = JSON.parse(data);
 
         orders = orders.map(order => {
-            order.orderConfirmed = true;
-            order.email = email;
+            if (!order.orderConfirmed) { 
+                order.orderConfirmed = true;
+                order.email = email;
+            }
             return order;
         });
 
@@ -116,10 +120,11 @@ router.post(`/order/confirm`, (req, res) => {
                 return res.status(500).json({ error: 'Unable to write to orders file' });
             }
 
-            res.json({ message: 'All orders confirmed successfully' });
+            res.json({ message: 'Unconfirmed orders confirmed successfully' });
         });
     });
 });
+
 
 router.post('/order/reduceNumber', (req, res) => {
     const { productId, quantity } = req.body;

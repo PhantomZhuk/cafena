@@ -33,6 +33,10 @@ app.get(`/blog`, (req, res) => {
     res.sendFile(path.join(__dirname, `public`, `blog`, `blog.html`))
 })
 
+app.get(`/admin`, (req, res) => {
+    res.sendFile(path.join(__dirname, `public`, `admin`, `admin.html`))
+})
+
 let loggedIn = false;
 app.get('/client', (req, res) => {
     if (!loggedIn) {

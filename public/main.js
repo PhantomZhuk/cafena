@@ -23,3 +23,7 @@ $(`#subscribeBtn`).click(() => {
             window.location.href = `http://localhost:3000/home`;
         })
 });
+
+$(`#adminBtn`).dblclick(()=>{
+    window.location.href = `http://localhost:3000/admin`;
+});

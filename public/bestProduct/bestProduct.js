@@ -197,3 +197,7 @@ $(`#sendEmailBtn`).click(() => {
     }, 1700);
 
 });
+
+$(`#adminBtn`).dblclick(()=>{
+    window.location.href = `http://localhost:3000/admin`;
+});

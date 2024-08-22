@@ -9,3 +9,7 @@ $(`.fa-bars`).click(()=>{
         menuOpen = false;
     }
 });
+
+$(`#adminBtn`).dblclick(()=>{
+    window.location.href = `http://localhost:3000/admin`;
+});

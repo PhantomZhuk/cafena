@@ -32,3 +32,7 @@ axios.get('/userData')
 .catch(error => {
     console.error('Error fetching user data:', error);
 });
+
+$(`#adminBtn`).dblclick(()=>{
+    window.location.href = `http://localhost:3000/admin`;
+});
