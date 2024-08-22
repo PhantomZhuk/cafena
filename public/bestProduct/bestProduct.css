@@ -4,6 +4,92 @@
   box-sizing: border-box;
 }
 
+.orderVerificationPopup {
+  display: none;
+  width: 300px;
+  height: 240px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  margin-top: -150px;
+  margin-left: -150px;
+  z-index: 100;
+  opacity: 1;
+}
+.orderVerificationPopup .emailInputContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.orderVerificationPopup .emailInputContainer h2 {
+  font-size: 16px;
+  text-align: center;
+}
+.orderVerificationPopup .emailInputContainer input {
+  border: none;
+  border-bottom: 1.5px solid #232020;
+  outline: none;
+  padding-left: 10px;
+  font-size: 16px;
+  width: 80%;
+  height: 40px;
+}
+.orderVerificationPopup .emailInputContainer button {
+  padding: 12px 40px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #232020;
+  color: #fff;
+  font-size: 16px;
+}
+.orderVerificationPopup .animate {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.orderVerificationPopup path {
+  stroke-dasharray: 99.4757843018;
+  stroke-dashoffset: -99.4757843018;
+  fill: transparent;
+}
+.orderVerificationPopup svg.animate path {
+  animation: 1.7s ease forwards draw;
+  opacity: 1;
+}
+@keyframes draw {
+  0% {
+    opacity: 1;
+    stroke-dashoffset: -99.4757843018;
+    fill: transparent;
+    transform: translateY(0);
+  }
+  35% {
+    stroke-dashoffset: 0;
+    fill: transparent;
+  }
+  60% {
+    fill: #3da35a;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    fill: #3da35a;
+    stroke-dashoffset: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    display: none;
+  }
+}
+
 .wrap {
   width: 100%;
   min-height: 100vh;

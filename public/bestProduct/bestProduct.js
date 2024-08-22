@@ -163,16 +163,37 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
         });
 });
 
-$(`#buyBtn`).click(()=>{
-    axios.post(`/api/goods/order/confirm`)
-    .then(res=>{
-        console.log(res.data.message);
-        return axios.get(`/api/goods/unformalizedOrders`);
-    })
-    .then(res => {
-        updateCart();
-    })
-    .catch(err => {
-        console.error('Error confirming orders:', err);
-    });
+$(`#buyBtn`).click(() => {
+    $(`.orderVerificationPopup`).css(`display`, `flex`);
+    $(`.wrap`).css(`filter`, `blur(5px)`);
+    $(`#emailIn`).focus();
+});
+
+$(`#sendEmailBtn`).click(() => {
+    let email = $(`#emailIn`).val();
+
+    axios.post(`/api/goods/order/confirm`, { email })
+        .then(res => {
+            console.log(res.data.message);
+            return axios.get(`/api/goods/unformalizedOrders`);
+        })
+        .then(res => {
+            updateCart();
+        })
+        .catch(err => {
+            console.error('Error confirming orders:', err);
+        });
+
+    $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
+    $(`.animate`).css(`display`, `flex`);
+    $(`.emailInputContainer`).css(`display`, `none`);
+
+    setTimeout(() => {
+        $(`.orderVerificationPopup`).css(`display`, `none`);
+        $(`.orderVerificationPopup`).css(`animation`, `none`);
+        $(`.emailInputContainer`).css(`display`, `flex`);
+        $(`.animate`).css(`display`, `none`);
+        $(`.wrap`).css(`filter`, `blur(0px)`);
+    }, 1700);
+
 });
