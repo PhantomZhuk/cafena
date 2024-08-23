@@ -19,8 +19,8 @@ $(`#subscribeBtn`).click(() => {
 
     axios.post(`http://localhost:3000/subscribe`, data)
         .then(res => {
-            console.log(res);
-            window.location.href = `http://localhost:3000/home`;
+            console.log(res.data);
+            // window.location.href = `http://localhost:3000/home`;
         })
 });
 

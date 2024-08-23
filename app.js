@@ -64,6 +64,17 @@ app.get('/userData', (req, res) => {
     });
 });
 
+app.get(`/followerList`, (req, res) => {
+    fs.readFile(emailFilePath, `utf8`, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({ error: 'Unable to read follower file' })
+        }
+        const followers = JSON.parse(data)
+        res.json(followers);
+    })
+})
+
 
 app.post(`/signup`, (req, res) => {
     let { login, email, password } = req.body
@@ -108,21 +119,31 @@ app.post(`/signin`, (req, res) => {
         res.send(signup);
     }, 1000)
 })
+const emailFilePath = path.join(__dirname, './data/follower.json')
 
 app.post(`/subscribe`, (req, res) => {
-    let {email} = req.body;
-    let data = {
-        email
+    let { email } = req.body;
+    let info = {
+        email,
+        time: new Date().toLocaleString()
     }
-
-    fs.appendFile(`subscribers.txt`, JSON.stringify(data) + `\n`, (err) => {
+    fs.readFile(emailFilePath, 'utf8', (err, data) => {
         if (err) {
-            console.log(err)
-            return res.status(500).send(`internal server error`);
+            console.log(err);
+            return res.status(500).json({ error: 'Unable to read orders file' });
         }
 
-        res.status(201).send(`User data save sucessfully`);
-    })
+        let fileContent = JSON.parse(data);
+        fileContent.push(info);
+
+        fs.writeFileSync(emailFilePath, JSON.stringify(fileContent))
+        res.send({ massage: `data saved` })
+    });
+
+
+
+    // console.log(jsonData)
+
 })
 
 app.listen(PORT, () => {

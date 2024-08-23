@@ -1,15 +1,35 @@
-$(`#adminBtn`).dblclick(() => {
-    window.location.href = `http://localhost:3000/admin`;
+$(`#adminBtn`).click(() => {
+    window.location.href = `http://localhost:3000`;
 });
 
-function updateCart() {
+$(`#ordersBtn`).click(() => {
+    $(`.OredrsContainer`).css(`display`, `flex`);
+    $(`.followersContainer`).css(`display`, `none`);
+});
+
+$(`#followersBtn`).click(() => {
+    $(`.OredrsContainer`).css(`display`, `none`);
+    $(`.followersContainer`).css(`display`, `flex`);
+});
+
+$(`#followersList`).click(() => {
+    $(`.followersList`).css(`display`, `flex`);
+    $(`.sendMessageContactor`).css(`display`, `none`);
+});
+
+$(`#clearingFollowers`).click(() => {
+    $(`.followersList`).css(`display`, `none`);
+    $(`.sendMessageContactor`).css(`display`, `flex`);
+});
+
+function updateOrderCart() {
     axios.get(`/api/goods/orders`)
         .then(res => {
             const data = res.data;
-            $('.main').empty();
+            $('.OredrsContainer').empty();
 
             data.forEach(el => {
-                $('.main').append(
+                $('.OredrsContainer').append(
                     `
                     <div class="userOrderContainer">
     <div class="userHeader">
@@ -39,4 +59,22 @@ function updateCart() {
         });
 }
 
-updateCart();
+updateOrderCart();
+
+
+function updateFolowerCart() {
+    axios.get(`http://localhost:3000/followerList`)
+        .then(res => {
+            console.log(res.data);
+            for (let el of res.data) {
+                $(`.followersList`).append(`
+            <div class="followerContainer">
+                <h2>${el.email}</h2>
+                <p>${el.time}</p>
+            </div>
+        `)
+            }
+        })
+}
+
+updateFolowerCart()

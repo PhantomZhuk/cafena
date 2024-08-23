@@ -7,6 +7,7 @@ const router = express.Router();
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
 const ordersFilePath = path.join(__dirname, '../data/orders.json')
+const emailFilePath = path.join(__dirname, '../data/follower.json')
 
 
 router.get(`/`, (req, res)=>{
@@ -159,8 +160,6 @@ router.post('/order/reduceNumber', (req, res) => {
         });
     });
 });
-
-
 
 
 router.get(`/list`, (req, res)=>{

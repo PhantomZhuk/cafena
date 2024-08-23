@@ -9,62 +9,54 @@
   min-height: 100vh;
   background-color: #f4f1ee;
   display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 .wrap header {
-  width: 100%;
-  height: 15vh;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 100px;
-}
-.wrap header nav a {
-  text-decoration: none;
-  font-family: "Montserrat";
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: 0.04em;
-  text-align: center;
-  color: #000;
-  margin: 20px;
-}
-.wrap header .logo img {
-  width: 90px;
-}
-.wrap header .btnContainer i {
-  font-size: 20px;
-  color: #000;
-  margin: 20px;
-  cursor: pointer;
-}
-.wrap header .menuConatiner {
-  display: none;
-  position: absolute;
-  top: 11vh;
-  width: 300px;
-  height: 300px;
+  width: 20%;
   background-color: #fff;
-  border: 1px solid #d48a5c;
-  right: 100px;
-}
-.wrap header .menuConatiner nav {
-  width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 50px 20px;
+}
+.wrap header .logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap header .logo img {
+  width: 40%;
+}
+.wrap header nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.wrap header nav button {
+  width: 100%;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background-color: #000;
+  text-align: start;
+  font-size: 16px;
 }
 .wrap main {
-  width: 100%;
-  min-height: 85vh;
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  padding: 20px 100px;
+  width: 80%;
+  min-height: 100vh;
 }
-.wrap main .userOrderContainer {
+.wrap main .OredrsContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: none;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.wrap main .OredrsContainer .userOrderContainer {
   min-width: 300px;
   min-height: 450px;
   background-color: #fff;
@@ -75,14 +67,14 @@
   margin: 10px;
   border-radius: 10px;
 }
-.wrap main .userOrderContainer .userHeader {
+.wrap main .OredrsContainer .userOrderContainer .userHeader {
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
   padding: 0 25px;
 }
-.wrap main .userOrderContainer .mainOrderContainer {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer {
   width: 100%;
   min-height: 400px;
   display: flex;
@@ -90,7 +82,7 @@
   align-items: center;
   flex-wrap: wrap;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart {
   width: 250px;
   height: 300px;
   display: flex;
@@ -102,17 +94,17 @@
   padding: 10px;
   margin: 10px;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .imgContainer {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .imgContainer {
   width: 100%;
   height: 175px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .imgContainer img {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .imgContainer img {
   height: 175px;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .textContainer {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .textContainer {
   width: 70%;
   height: 150px;
   display: flex;
@@ -120,19 +112,70 @@
   justify-content: space-between;
   padding: 20px 0;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .textContainer .name {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .textContainer .name {
   font-size: 16px;
   font-weight: 600;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .textContainer .bottomBlock {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .textContainer .bottomBlock {
   width: 100%;
   height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.wrap main .userOrderContainer .mainOrderContainer .productInCart .textContainer .bottomBlock .price {
+.wrap main .OredrsContainer .userOrderContainer .mainOrderContainer .productInCart .textContainer .bottomBlock .price {
   color: #4f3e22;
   font-weight: 700;
   font-size: 16px;
+}
+.wrap main .followersContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 100px;
+}
+.wrap main .followersContainer .followerHeader {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap main .followersContainer .followerHeader button {
+  margin: 10px;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #000;
+  cursor: pointer;
+  font-size: 16px;
+}
+.wrap main .followersContainer .followersList {
+  width: 100%;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.wrap main .followersContainer .followersList .followerContainer {
+  width: 100%;
+  height: 75px;
+  background-color: orange;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wrap main .followersContainer .sendMessageContactor {
+  display: none;
+  width: 100%;
+  min-height: 90vh;
 }/*# sourceMappingURL=admin.css.map */
