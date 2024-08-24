@@ -61,12 +61,14 @@ function updateOrderCart() {
 
 updateOrderCart();
 
+let numberFollower = 0;
 
 function updateFolowerCart() {
     axios.get(`http://localhost:3000/followerList`)
         .then(res => {
             console.log(res.data);
             for (let el of res.data) {
+                numberFollower++
                 $(`.followersList`).append(`
             <div class="followerContainer">
                 <h2>${el.email}</h2>
@@ -78,3 +80,5 @@ function updateFolowerCart() {
 }
 
 updateFolowerCart()
+
+$(`#numberFollower`).text(numberFollower)
