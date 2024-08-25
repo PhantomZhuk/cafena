@@ -66,14 +66,18 @@ let numberFollower = 0;
 function updateFolowerCart() {
     axios.get(`http://localhost:3000/followerList`)
         .then(res => {
-            console.log(res.data);
+            $(`.followersList`).empty();
             for (let el of res.data) {
                 numberFollower++
+                $(`#numberFollower`).text(numberFollower)
                 $(`.followersList`).append(`
-            <div class="followerContainer">
-                <h2>${el.email}</h2>
-                <p>${el.time}</p>
-            </div>
+                    <div class="followerContainer">
+                        <h2>${el.email}</h2>
+                        <p>${el.time}</p>
+                        <div class="deleteFollowerBtn" id="delete${el.email}">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </div>
+                    </div>
         `)
             }
         })
@@ -81,4 +85,19 @@ function updateFolowerCart() {
 
 updateFolowerCart()
 
-$(`#numberFollower`).text(numberFollower)
+$(`.wrap`).click((e) => {
+    let id = $(e.target).attr('id');
+    
+    if (id && id.includes('delete')) {
+        let email = id.replace('delete', '').trim();
+        
+        axios.post(`http://localhost:3000/deleteFollower`, { email })
+            .then(res => {
+                console.log(res.data.message);
+                updateFolowerCart();
+            })
+            .catch(err => {
+                console.error('Error deleting follower:', err);
+            });
+    }
+});

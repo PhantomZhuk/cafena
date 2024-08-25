@@ -7,14 +7,14 @@ const router = express.Router();
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
 const ordersFilePath = path.join(__dirname, '../data/orders.json')
-const emailFilePath = path.join(__dirname, '../data/follower.json')
+const emailFilePath = path.join(__dirname, './data/follower.json')
 
 
-router.get(`/`, (req, res)=>{
-    fs.readFile(productsFilePath, `utf8`, (err, data)=>{
-        if(err ){
+router.get(`/`, (req, res) => {
+    fs.readFile(productsFilePath, `utf8`, (err, data) => {
+        if (err) {
             console.log(err);
-            res.status(500).json({error: 'Unable to read product file'})
+            res.status(500).json({ error: 'Unable to read product file' })
         }
         const products = JSON.parse(data)
         res.json(products);
@@ -36,11 +36,11 @@ router.get('/unformalizedOrders', (req, res) => {
 });
 
 
-router.get(`/orders`, (req, res)=>{
-    fs.readFile(ordersFilePath, `utf8`, (err, data)=>{
-        if(err ){
+router.get(`/orders`, (req, res) => {
+    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+        if (err) {
             console.log(err);
-            res.status(500).json({error: 'Unable to read product file'})
+            res.status(500).json({ error: 'Unable to read product file' })
         }
         const orders = JSON.parse(data)
         const Orders = orders.filter(order => order.orderConfirmed);
@@ -100,7 +100,7 @@ router.post(`/order`, (req, res) => {
 
 router.post(`/order/confirm`, (req, res) => {
     const { email } = req.body;
-    
+
     fs.readFile(ordersFilePath, `utf8`, (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
@@ -109,7 +109,7 @@ router.post(`/order/confirm`, (req, res) => {
         let orders = JSON.parse(data);
 
         orders = orders.map(order => {
-            if (!order.orderConfirmed) { 
+            if (!order.orderConfirmed) {
                 order.orderConfirmed = true;
                 order.email = email;
             }
@@ -162,11 +162,11 @@ router.post('/order/reduceNumber', (req, res) => {
 });
 
 
-router.get(`/list`, (req, res)=>{
-    fs.readFile(ordersFilePath, `utf8`, (err, data)=>{
-        if(err ){
+router.get(`/list`, (req, res) => {
+    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+        if (err) {
             console.log(err);
-            res.status(500).json({error: 'Unable to read product file'})
+            res.status(500).json({ error: 'Unable to read product file' })
         }
         const products = JSON.parse(data)
         res.json(products);

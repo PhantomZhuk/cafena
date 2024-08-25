@@ -139,12 +139,36 @@ app.post(`/subscribe`, (req, res) => {
         fs.writeFileSync(emailFilePath, JSON.stringify(fileContent))
         res.send({ massage: `data saved` })
     });
-
-
-
-    // console.log(jsonData)
-
 })
+
+app.post(`/deleteFollower`, (req, res) => {
+    const { email } = req.body;
+
+    fs.readFile(emailFilePath, `utf8`, (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to read follower file' });
+        }
+
+        const followers = JSON.parse(data);
+
+        const index = followers.findIndex(follower => follower.email === email);
+
+        if (index === -1) {
+            return res.status(404).json({ error: 'Follower not found' });
+        }
+
+        followers.splice(index, 1);
+
+        fs.writeFile(emailFilePath, JSON.stringify(followers), 'utf8', err => {
+            if (err) {
+                return res.status(500).json({ error: 'Unable to write to follower file' });
+            }
+
+            res.json({ message: 'Follower deleted successfully' });
+        });
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)

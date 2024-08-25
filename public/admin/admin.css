@@ -157,7 +157,7 @@
 .wrap main .followersContainer .followersList {
   width: 100%;
   min-height: 90vh;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   overflow: scroll;
@@ -167,19 +167,41 @@
 .wrap main .followersContainer .followersList .followerContainer {
   width: 100%;
   height: 75px;
-  background-color: orange;
+  background-color: #F28500;
   border-radius: 10px;
-  padding: 10px;
+  padding: 0 0 0 20px;
   margin: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.wrap main .followersContainer .sendMessageContactor {
+.wrap main .followersContainer .followersList .followerContainer h2 {
+  font-size: 24px;
+  color: #fff;
+}
+.wrap main .followersContainer .followersList .followerContainer p {
+  font-size: 16px;
+  color: #fff;
+}
+.wrap main .followersContainer .followersList .followerContainer .deleteFollowerBtn {
+  width: 75px;
+  background-color: #cc0000;
+  height: 75px;
+  border-radius: 10px;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+.wrap main .followersContainer .followersList .followerContainer .deleteFollowerBtn:hover {
+  background-color: #ff0000;
+}
+.wrap main .followersContainer .sendMessageContactor {
   width: 100%;
   min-height: 90vh;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
 }
