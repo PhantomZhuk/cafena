@@ -23,10 +23,10 @@ $(`#lognUpBtn`).click(() => {
     $(`#emailUp`).val(``);
     $(`#passwordUp`).val(``);
 
-    axios.post(`http://localhost:3000/signup`, data)
+    axios.post(`/signup`, data)
         .then(res => {
             console.log(res);
-            window.location.href = `http://localhost:3000/profile`;
+            window.location.href = `/profile`;
         })
 });
 
@@ -39,13 +39,13 @@ $(`#lognInBtn`).click(() => {
     $(`#emailIn`).val(``);
     $(`#passwordIn`).val(``);
 
-    axios.post(`http://localhost:3000/signin`, data)
+    axios.post(`/signin`, data)
         .then(res => {
             console.log(res);
             if (res.data == false) {
                 alert(`Користувача не знайдено`)
             } else if (res.data == true) {
-                window.location.href = `http://localhost:3000/profile`;
+                window.location.href = `/profile`;
             }
         })
 });

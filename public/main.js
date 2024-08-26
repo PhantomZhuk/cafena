@@ -17,13 +17,12 @@ $(`#subscribeBtn`).click(() => {
 
     $(`#emailSubscriber`).val(``);
 
-    axios.post(`http://localhost:3000/subscribe`, data)
+    axios.post(`/subscribe`, data)
         .then(res => {
             console.log(res.data);
-            // window.location.href = `http://localhost:3000/home`;
         })
 });
 
 $(`#adminBtn`).dblclick(()=>{
-    window.location.href = `http://localhost:3000/admin`;
+    window.location.href = `/admin`;
 });

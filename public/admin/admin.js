@@ -1,5 +1,5 @@
 $(`#adminBtn`).click(() => {
-    window.location.href = `http://localhost:3000`;
+    window.location.href = `/`;
 });
 
 $(`#ordersBtn`).click(() => {
@@ -62,9 +62,10 @@ function updateOrderCart() {
 updateOrderCart();
 
 let numberFollower = 0;
+$(`#numberFollower`).text(numberFollower)
 
 function updateFolowerCart() {
-    axios.get(`http://localhost:3000/followerList`)
+    axios.get(`/followerList`)
         .then(res => {
             $(`.followersList`).empty();
             for (let el of res.data) {
@@ -91,7 +92,7 @@ $(`.wrap`).click((e) => {
     if (id && id.includes('delete')) {
         let email = id.replace('delete', '').trim();
         
-        axios.post(`http://localhost:3000/deleteFollower`, { email })
+        axios.post(`/deleteFollower`, { email })
             .then(res => {
                 console.log(res.data.message);
                 updateFolowerCart();
