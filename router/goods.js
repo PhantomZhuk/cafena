@@ -35,7 +35,6 @@ router.get('/unformalizedOrders', (req, res) => {
     });
 });
 
-
 router.get(`/orders`, (req, res) => {
     fs.readFile(ordersFilePath, `utf8`, (err, data) => {
         if (err) {
@@ -47,6 +46,7 @@ router.get(`/orders`, (req, res) => {
         res.json(Orders);
     })
 });
+
 
 router.post(`/order`, (req, res) => {
     const { productId, quantity } = req.body;
@@ -160,6 +160,7 @@ router.post('/order/reduceNumber', (req, res) => {
         });
     });
 });
+
 
 
 router.get(`/list`, (req, res) => {

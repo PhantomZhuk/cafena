@@ -22,44 +22,61 @@ $(`#clearingFollowers`).click(() => {
     $(`.sendMessageContactor`).css(`display`, `flex`);
 });
 
-function updateOrderCart() {
+function updateOrderMainCart() {
     axios.get(`/api/goods/orders`)
         .then(res => {
             const data = res.data;
             $('.OredrsContainer').empty();
-
-            data.forEach(el => {
+            const uniqueEmails = [...new Set(data.map(order => order.email))];
+            for (let email of uniqueEmails) {
                 $('.OredrsContainer').append(
                     `
                     <div class="userOrderContainer">
-    <div class="userHeader">
-        <h2>${el.email}</h2>
-    </div>
-    <div class="mainOrderContainer">
-        <div class="productInCart">
-            <div class="imgContainer">
-                <img src="./${el.img}" alt="photo">
-            </div>
-            <div class="textContainer">
-                <h4 class="name">${el.name}</h4>
-                <div class="bottomBlock">
-                    <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity} Qty</div>
-                    <p class="price">${el.price} $</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        <div class="userHeader">
+                            <h2>${email}</h2>
+                        </div>
+                        <div class="mainOrderContainer" id="ordersFor_${email.replace(/[@.]/g, '_')}">
+                        </div>
+                    </div>
                     `
                 );
-            });
+            }
+            updateOrderCart(data);
         })
         .catch(err => {
             console.error('Error updating cart:', err);
         });
 }
 
-updateOrderCart();
+function updateOrderCart(data) {
+    const uniqueEmails = [...new Set(data.map(order => order.email))];
+
+    for (let email of uniqueEmails) {
+        const ordersForEmail = data.filter(order => order.email === email);
+        const emailContainer = $(`#ordersFor_${email.replace(/[@.]/g, '_')}`);
+
+        for (let el of ordersForEmail) {
+            emailContainer.append(
+                `
+                <div class="productInCart">
+                    <div class="imgContainer">
+                        <img src="./${el.img}" alt="photo">
+                    </div>
+                    <div class="textContainer">
+                        <h4 class="name">${el.name}</h4>
+                        <div class="bottomBlock">
+                            <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity} Qty</div>
+                            <p class="price">${el.price} $</p>
+                        </div>
+                    </div>
+                </div>
+                `
+            );
+        }
+    }
+}
+
+updateOrderMainCart();
 
 let numberFollower = 0;
 $(`#numberFollower`).text(numberFollower)
@@ -88,10 +105,10 @@ updateFolowerCart()
 
 $(`.wrap`).click((e) => {
     let id = $(e.target).attr('id');
-    
+
     if (id && id.includes('delete')) {
         let email = id.replace('delete', '').trim();
-        
+
         axios.post(`/deleteFollower`, { email })
             .then(res => {
                 console.log(res.data.message);
