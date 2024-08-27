@@ -149,33 +149,69 @@ $(`#buyBtn`).click(() => {
 
 $(`#sendEmailBtn`).click(() => {
     let email = $(`#emailIn`).val();
+    let emailRegex = /([a-z\d]{3,64})+@([a-z]{3,255})+\.[a-z]{2,63}/;
+    if (emailRegex.test(email)) {
+        axios.post(`/api/goods/order/confirm`, { email })
+            .then(res => {
+                console.log(res.data.message);
+                return axios.get(`/api/goods/unformalizedOrders`);
+            })
+            .then(res => {
+                updateCart();
+            })
+            .catch(err => {
+                console.error('Error confirming orders:', err);
+            });
 
-    axios.post(`/api/goods/order/confirm`, { email })
-        .then(res => {
-            console.log(res.data.message);
-            return axios.get(`/api/goods/unformalizedOrders`);
-        })
-        .then(res => {
-            updateCart();
-        })
-        .catch(err => {
-            console.error('Error confirming orders:', err);
-        });
+        $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
+        $(`.animate`).css(`display`, `flex`);
+        $(`.emailInputContainer`).css(`display`, `none`);
 
-    $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
-    $(`.animate`).css(`display`, `flex`);
-    $(`.emailInputContainer`).css(`display`, `none`);
-
-    setTimeout(() => {
-        $(`.orderVerificationPopup`).css(`display`, `none`);
-        $(`.orderVerificationPopup`).css(`animation`, `none`);
-        $(`.emailInputContainer`).css(`display`, `flex`);
-        $(`.animate`).css(`display`, `none`);
-        $(`.wrap`).css(`filter`, `blur(0px)`);
-    }, 1700);
-
+        setTimeout(() => {
+            $(`.orderVerificationPopup`).css(`display`, `none`);
+            $(`.orderVerificationPopup`).css(`animation`, `none`);
+            $(`.emailInputContainer`).css(`display`, `flex`);
+            $(`.animate`).css(`display`, `none`);
+            $(`.wrap`).css(`filter`, `blur(0px)`);
+        }, 1700);
+    } else {
+        $(`#emailIn`).css(`border`, `2px solid red`);
+        $(`.notification`).text(`Your email isn't correct.`);
+        $(`.notificationContainer`).css(`display`, `flex`);
+        setTimeout(() => {
+            $(`.notificationContainer`).css(`display`, `none`);
+            $(`#emailIn`).css(`border`, `none`);
+            $(`.notification`).text(``);
+        }, 3000);
+    }
 });
 
 $(`#adminBtn`).dblclick(()=>{
     window.location.href = `/admin`;
+});
+
+$(`#subscribeBtn`).click(() => {
+    let emailRegex = /([a-z\d]{3,64})+@([a-z]{3,255})+\.[a-z]{2,63}/;
+    let email = $(`#emailSubscriber`).val();
+    if (emailRegex.test(email)) {
+        let data = {
+            email
+        }
+
+        $(`#emailSubscriber`).val(``);
+
+        axios.post(`/subscribe`, data)
+            .then(res => {
+                console.log(res.data);
+            })
+    } else {
+        $(`#emailSubscriber`).css(`border`, `2px solid red`);
+        $(`.notification`).text(`Your email isn't correct.`);
+        $(`.notificationContainer`).css(`display`, `flex`);
+        setTimeout(() => {
+            $(`.notificationContainer`).css(`display`, `none`);
+            $(`#emailSubscriber`).css(`border`, `none`);
+            $(`.notification`).text(``);
+        }, 3000);
+    }
 });

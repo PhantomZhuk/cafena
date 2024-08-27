@@ -18,7 +18,7 @@
   left: 50%;
   margin-top: -150px;
   margin-left: -150px;
-  z-index: 100;
+  z-index: 50;
   opacity: 1;
 }
 .orderVerificationPopup .emailInputContainer {
@@ -88,6 +88,23 @@
     transform: translateY(-10px);
     display: none;
   }
+}
+
+.notificationContainer {
+  position: fixed;
+  width: 300px;
+  height: 75px;
+  background-color: #fffcf8;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid #eab665;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 1px #b3b2b2;
+  z-index: 1111;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
 }
 
 .wrap {
