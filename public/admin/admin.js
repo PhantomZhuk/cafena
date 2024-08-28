@@ -119,3 +119,24 @@ $(`.wrap`).click((e) => {
             });
     }
 });
+
+
+$(`#sendMessage`).click(() => {
+    let massage = $(`#messageText`).val();
+    console.log(massage)
+    $(`.notification`).text(`Триває відправка`);
+    $(`.notificationContainer`).css(`display`, `flex`);
+    axios.post(`/sendMessage`, { massage })
+        .then(res => {
+            if (res.status == 200) { 
+                $(`.notification`).text(`Відправку завершено!`);
+                $(`.notificationContainer`).css(`background-color`, `green`);
+                $(`#spinner`).css(`display`, `none`);
+                setTimeout(() => {
+                    $(`.notificationContainer`).css(`display`, `none`);
+                    $(`.notification`).text(``);
+                }, 3000);
+            }
+            console.log(res);
+        })
+});

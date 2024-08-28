@@ -3,12 +3,23 @@ const path = require(`path`);
 const bodyParser = require(`body-parser`)
 const fs = require(`fs`)
 const app = express();
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 const PORT = 3000;
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_LOGIN,
+        pass: process.env.GMAIL_PASSWORD
+    },
+});
 
 app.use(express.static(path.join(__dirname, `public`)))
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const goodsRouter = require('./router/goods');
 app.use('/api/goods', goodsRouter);
@@ -168,6 +179,44 @@ app.post(`/deleteFollower`, (req, res) => {
         });
     });
 });
+
+app.post(`/sendMessage`, (req, res) => {
+    fs.readFile(emailFilePath, `utf8`, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({ error: 'Unable to read follower file' })
+        }
+        const followers = JSON.parse(data)
+        let currentmail = 0;
+        let timerID = setInterval(function () {
+            if (currentmail < followers.length) {
+                let mailOptions = {
+                    from: 'Administrator',
+                    to: followers[currentmail].email,
+                    subject: 'Message from cafena',
+                    text: req.body.massage,
+                };
+
+                transporter.sendMail(mailOptions, function (err, info) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(`Message was sended: ${info.response}`);
+                    }
+                });
+
+
+                console.log(`Повідомлення ${currentmail} відправлено`);
+                currentmail++;
+            }
+            else {
+                clearInterval(timerID);
+                console.log('Відправку завершено')
+                res.status(200).json({ message: 'Email send was done' })
+            }
+        }, 3000)
+    })
+})
 
 
 app.listen(PORT, () => {
