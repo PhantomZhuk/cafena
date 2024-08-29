@@ -186,7 +186,7 @@ $(`#sendEmailBtn`).click(() => {
     }
 });
 
-$(`#adminBtn`).dblclick(()=>{
+$(`#adminBtn`).dblclick(() => {
     window.location.href = `/admin`;
 });
 
@@ -204,6 +204,12 @@ $(`#subscribeBtn`).click(() => {
             .then(res => {
                 console.log(res.data);
             })
+        $(`.notification`).text(`You have subscribed to the newsletter.`);
+        $(`.notificationContainer`).css(`display`, `flex`);
+        setTimeout(() => {
+            $(`.notificationContainer`).css(`display`, `none`);
+            $(`.notification`).text(``);
+        }, 3000);
     } else {
         $(`#emailSubscriber`).css(`border`, `2px solid red`);
         $(`.notification`).text(`Your email isn't correct.`);
