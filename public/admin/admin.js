@@ -109,6 +109,9 @@ $(`.wrap`).click((e) => {
     if (id && id.includes('delete')) {
         let email = id.replace('delete', '').trim();
 
+        numberFollower--
+        $(`#numberFollower`).text(numberFollower)
+
         axios.post(`/deleteFollower`, { email })
             .then(res => {
                 console.log(res.data.message);
@@ -128,7 +131,7 @@ $(`#sendMessage`).click(() => {
     $(`.notificationContainer`).css(`display`, `flex`);
     axios.post(`/sendMessage`, { massage })
         .then(res => {
-            if (res.status == 200) { 
+            if (res.status == 200) {
                 $(`.notification`).text(`Відправку завершено!`);
                 $(`.notificationContainer`).css(`background-color`, `green`);
                 $(`#spinner`).css(`display`, `none`);
