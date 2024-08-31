@@ -123,18 +123,66 @@ $(`.wrap`).click((e) => {
     }
 });
 
+$('.sentRecipientsContainer').text(0);
+function getStatus() {
+    axios.get('/status')
+        .then(res => {
+            $('.sentRecipientsContainer').text(res.data.currentmail);
+            console.log(res)
+        })
+        .catch(error => {
+            console.error('Помилка при отриманні статусу:', error);
+        });
+}
 
+// let hours = 0;
+// let minutes = 0;
+// let seconds = 0;
 $(`#sendMessage`).click(() => {
     let massage = $(`#messageText`).val();
-    console.log(massage)
-    $(`.notification`).text(`Триває відправка`);
+    $(`#messageText`).val(``);
+    $(`.notification`).text(`The shipment is underway!`);
     $(`.notificationContainer`).css(`display`, `flex`);
+    $(`.notificationContainer`).css(`border`, `1px solid #eab665`);
+    $(`.notificationContainer`).css(`box-shadow`, `0 0 5px 1px #b3b2b2`);
+    $(`.durationScreen`).css(`display`, `flex`);
+    $(`.notificationTextContainer`).css(`display`, `none`);
+    $(`.totalRecipientsContainer`).text(numberFollower);
+
+    // let totalSecond = numberFollower;
+    // function convertSecondsToTime(totalSecond){
+    //     hours = Math.floor(totalSecond / 3600);
+    //     minutes = Math.floor((totalSecond % 3600) / 60);
+    //     seconds = totalSecond % 60;
+    
+    //     let formattedHours = hours < 10 ? '0' + hours : hours;
+    //     let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    //     let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+    
+    //     $(`.hour`).text(formattedHours);
+    //     $(`.minute`).text(formattedMinutes);
+    //     $(`.second`).text(formattedSeconds);    
+    // }
+
+    // convertSecondsToTime(totalSecond);
+
+    // let timeStatus = setInterval(() => {
+    //     totalSecond--
+    //     convertSecondsToTime(totalSecond);
+    // }, 1000);;
+
+    let status = setInterval(getStatus, 500);
     axios.post(`/sendMessage`, { massage })
         .then(res => {
             if (res.status == 200) {
-                $(`.notification`).text(`Відправку завершено!`);
-                $(`.notificationContainer`).css(`background-color`, `green`);
+                clearInterval(status);
+                $(`.notification`).text(`The shipment is complete!`);
                 $(`#spinner`).css(`display`, `none`);
+                $(`.notificationTextContainer`).css(`display`, `flex`);
+                $(`.notificationContainer`).css(`border`, `1px solid #40ab40`);
+                $(`.notificationContainer`).css(`box-shadow`, `0 0 5px 1px #40ab40`);
+                $(`.notificationContainer`).css(`animation`, `1.7s ease forwards draw`);
+                $(`.durationScreen`).css(`display`, `none`);
                 setTimeout(() => {
                     $(`.notificationContainer`).css(`display`, `none`);
                     $(`.notification`).text(``);

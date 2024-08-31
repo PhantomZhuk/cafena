@@ -32,11 +32,36 @@
     <div class="wrap">
 
         <div class="notificationContainer">
-            <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" id="spinner">
-                <circle class="spin2" cx="400" cy="400" fill="none" r="200" stroke-width="50" stroke="#E387FF"
-                    stroke-dasharray="700 1400" stroke-linecap="round" />
-            </svg>
-            <p class="notification"></p>
+            <div class="durationScreen">
+                <div class="header">
+                    <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" id="spinner">
+                        <circle class="spin2" cx="400" cy="400" fill="none" r="200" stroke-width="50" stroke="#d48a5c"
+                            stroke-dasharray="700 1400" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="loadingLaneContainer">
+                    <div class="timerContainer">
+                        <div class="hour"></div>: 
+                        <div class="minute"></div>:
+                        <div class="second"></div> 
+                    </div>
+                    <p class="notification"></p>
+                    <div class="statusContainer">
+                        <div class="sentRecipientsContainer"></div>
+                        /
+                        <div class="totalRecipientsContainer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="notificationTextContainer">
+                <div class="notificationHeader">
+                    <svg class="animate" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 18 32.34 l -8.34 -8.34 -2.83 2.83 11.17 11.17 24 -24 -2.83 -2.83 z" stroke="#3da35a"
+                            fill="transparent" />
+                    </svg>
+                </div>
+                <p class="notification"></p>
+            </div>
         </div>
 
         <header>

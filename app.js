@@ -86,6 +86,25 @@ app.get(`/followerList`, (req, res) => {
     })
 })
 
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    timerID = setInterval(() => {
+        res.write(`data: ${JSON.stringify({ currentmail })}\n\n`);
+    }, 3000);
+
+    req.on('close', () => {
+        clearInterval(timerID);
+    });
+});
+
+app.get('/status', (req, res) => {
+    res.json({ currentmail });
+});
+
 
 app.post(`/signup`, (req, res) => {
     let { login, email, password } = req.body
@@ -180,6 +199,7 @@ app.post(`/deleteFollower`, (req, res) => {
     });
 });
 
+let currentmail = 0;
 app.post(`/sendMessage`, (req, res) => {
     fs.readFile(emailFilePath, `utf8`, (err, data) => {
         if (err) {
@@ -187,7 +207,6 @@ app.post(`/sendMessage`, (req, res) => {
             res.status(500).json({ error: 'Unable to read follower file' })
         }
         const followers = JSON.parse(data)
-        let currentmail = 0;
         let timerID = setInterval(function () {
             if (currentmail < followers.length) {
                 let mailOptions = {
@@ -205,9 +224,8 @@ app.post(`/sendMessage`, (req, res) => {
                     }
                 });
 
-
-                console.log(`Повідомлення ${currentmail} відправлено`);
                 currentmail++;
+                console.log(`Повідомлення ${currentmail} відправлено`);
             }
             else {
                 clearInterval(timerID);
