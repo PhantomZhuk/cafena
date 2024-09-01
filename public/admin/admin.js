@@ -128,7 +128,6 @@ function getStatus() {
     axios.get('/status')
         .then(res => {
             $('.sentRecipientsContainer').text(res.data.currentmail);
-            console.log(res)
         })
         .catch(error => {
             console.error('Помилка при отриманні статусу:', error);
@@ -140,25 +139,18 @@ function getStatus() {
 // let seconds = 0;
 $(`#sendMessage`).click(() => {
     let massage = $(`#messageText`).val();
-    $(`#messageText`).val(``);
-    $(`.notification`).text(`The shipment is underway!`);
-    $(`.notificationContainer`).css(`display`, `flex`);
-    $(`.notificationContainer`).css(`border`, `1px solid #eab665`);
-    $(`.notificationContainer`).css(`box-shadow`, `0 0 5px 1px #b3b2b2`);
-    $(`.durationScreen`).css(`display`, `flex`);
-    $(`.notificationTextContainer`).css(`display`, `none`);
-    $(`.totalRecipientsContainer`).text(numberFollower);
+
 
     // let totalSecond = numberFollower;
     // function convertSecondsToTime(totalSecond){
     //     hours = Math.floor(totalSecond / 3600);
     //     minutes = Math.floor((totalSecond % 3600) / 60);
     //     seconds = totalSecond % 60;
-    
+
     //     let formattedHours = hours < 10 ? '0' + hours : hours;
     //     let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     //     let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-    
+
     //     $(`.hour`).text(formattedHours);
     //     $(`.minute`).text(formattedMinutes);
     //     $(`.second`).text(formattedSeconds);    
@@ -171,21 +163,28 @@ $(`#sendMessage`).click(() => {
     //     convertSecondsToTime(totalSecond);
     // }, 1000);;
 
+    $(`.notificationContainer`).css(`display`, `flex`);
+    $(`.notification`).text(`The shipment is underway!`);
+    $(`.notificationContainer`).css(`border`, `1px solid #eab665`);
+    $(`.notificationContainer`).css(`box-shadow`, `0 0 5px 1px #b3b2b2`);
+    $(`.totalRecipientsContainer`).text(numberFollower);
+    $(`.durationScreen`).css(`display`, `flex`);
+    $(`.notificationTextContainer`).css(`display`, `none`);
+    $(`.notificationContainer`).css(`animation`, `none`);
+    $('.sentRecipientsContainer').text(0);
     let status = setInterval(getStatus, 500);
     axios.post(`/sendMessage`, { massage })
         .then(res => {
             if (res.status == 200) {
                 clearInterval(status);
                 $(`.notification`).text(`The shipment is complete!`);
-                $(`#spinner`).css(`display`, `none`);
+                $(`.durationScreen`).css(`display`, `none`);
                 $(`.notificationTextContainer`).css(`display`, `flex`);
                 $(`.notificationContainer`).css(`border`, `1px solid #40ab40`);
                 $(`.notificationContainer`).css(`box-shadow`, `0 0 5px 1px #40ab40`);
-                $(`.notificationContainer`).css(`animation`, `1.7s ease forwards draw`);
-                $(`.durationScreen`).css(`display`, `none`);
+                $(`.notificationContainer`).css(`animation`, `3s ease forwards draw`);
                 setTimeout(() => {
                     $(`.notificationContainer`).css(`display`, `none`);
-                    $(`.notification`).text(``);
                 }, 3000);
             }
             console.log(res);

@@ -207,6 +207,7 @@ app.post(`/sendMessage`, (req, res) => {
             res.status(500).json({ error: 'Unable to read follower file' })
         }
         const followers = JSON.parse(data)
+        currentmail = 0
         let timerID = setInterval(function () {
             if (currentmail < followers.length) {
                 let mailOptions = {

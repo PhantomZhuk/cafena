@@ -109,7 +109,7 @@
   fill: transparent;
 }
 .notificationContainer .notificationTextContainer .notificationHeader svg.animate path {
-  animation: 1.7s ease forwards draw;
+  animation: 3s ease forwards draw;
   opacity: 1;
 }
 @keyframes draw {
@@ -133,7 +133,6 @@
     stroke-dashoffset: 0;
     opacity: 0;
     transform: translateY(-10px);
-    display: none;
   }
 }
 .notificationContainer .notificationTextContainer .notification {
