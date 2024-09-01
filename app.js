@@ -152,7 +152,7 @@ app.post(`/signin`, (req, res) => {
 const emailFilePath = path.join(__dirname, './data/follower.json')
 
 app.post(`/subscribe`, (req, res) => {
-    let { email } = req.body;
+    let { email, code } = req.body;
     let info = {
         email,
         time: new Date().toLocaleString()
@@ -164,10 +164,19 @@ app.post(`/subscribe`, (req, res) => {
         }
 
         let fileContent = JSON.parse(data);
-        fileContent.push(info);
-
-        fs.writeFileSync(emailFilePath, JSON.stringify(fileContent))
-        res.send({ massage: `data saved` })
+        if (code == randomCode) {
+            fileContent.push(info);
+            fs.writeFile(emailFilePath, JSON.stringify(fileContent), (err) => {
+                if (err) {
+                    console.error('Error writing file:', err);
+                } else {
+                    console.log('File has been written successfully.');
+                }
+            });
+            res.send({ massage: `data saved` })
+        } else {
+            res.send({ massage: `Incorrect code` })
+        }
     });
 })
 
@@ -226,16 +235,58 @@ app.post(`/sendMessage`, (req, res) => {
                 });
 
                 currentmail++;
-                console.log(`Повідомлення ${currentmail} відправлено`);
+                console.log(`Message ${currentmail} sent.`);
             }
             else {
                 clearInterval(timerID);
-                console.log('Відправку завершено')
+                console.log('Sending completed!')
                 res.status(200).json({ message: 'Email send was done' })
             }
         }, 3000)
     })
 })
+
+let randomCode;
+app.post('/sendConfirmationEmail', (req, res) => {
+    let { email } = req.body;
+
+    fs.readFile(emailFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: 'Unable to read orders file' });
+        }
+
+        let fileContent = JSON.parse(data);
+
+        const emailExists = fileContent.some(el => el.email === email);
+
+        if (emailExists) {
+            return res.send({ message: 'This email already exists' });
+        }
+
+        randomCode = Math.floor(Math.random() * (9999 - 1000) + 1000).toString();
+
+        let mailOptions = {
+            from: 'Cafena',
+            to: email,
+            subject: 'Login code',
+            text: randomCode,
+        };
+
+        transporter.sendMail(mailOptions, function (err, info) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ error: 'Failed to send email' });
+            } else {
+                console.log(`Message was sent: ${info.response}`);
+                return res.status(200).json({ message: 'Email sent successfully' });
+            }
+        });
+
+        res.send({ message: 'Code sent' });
+    });
+});
+
 
 
 app.listen(PORT, () => {
