@@ -87,20 +87,47 @@ function updateCart() {
 updateCart();
 
 $(`.popularCoffeeContainer`).click((e) => {
-    const productId = e.target.id;
-    const quantity = 1;
+    let productId = e.target.id;
+    let quantity = 1;
+    let isProductExists = false;
 
-    axios.post(`/api/goods/order`, { productId, quantity })
+    axios.get(`/api/goods`)
         .then(res => {
-            console.log(res.data.message);
-            return axios.get(`/api/goods/unformalizedOrders`);
+            const data = res.data;
+            for (el of data) {
+                if (productId == el.id) {
+                    isProductExists = true;
+                    console.log(isProductExists);
+                    break;
+                }
+            }
+
+            if (isProductExists == true) {
+                axios.post(`/api/goods/order`, { productId, quantity })
+                    .then(res => {
+                        console.log(res.data.message);
+                        return axios.get(`/api/goods/unformalizedOrders`);
+                    })
+                    .then(res => {
+                        updateCart();
+                    })
+                    .catch(err => {
+                        console.error('Error processing the order:', err);
+                    });
+
+                $(`.notification`).text(`Product added to cart!`);
+                $(`.notificationContainer`).css(`display`, `flex`);
+                setTimeout(() => {
+                    $(`.notificationContainer`).css(`display`, `none`);
+                    $(`.notification`).text(``);
+                }, 3000);
+            } else {
+                console.log(`error`);
+            }
         })
-        .then(res => {
-            updateCart();
-        })
-        .catch(err => {
-            console.error('Error processing the order:', err);
-        });
+
+
+
 });
 
 $('.productContainer').on('click', '.fa-minus', (e) => {
