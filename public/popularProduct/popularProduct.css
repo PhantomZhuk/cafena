@@ -518,6 +518,15 @@
     padding-top: 10px;
   }
 }
+@media screen and (max-width: 500px) {
+  .wrap main .popularCoffeeContainer .coffeeContainer {
+    width: 90%;
+    height: 115px;
+  }
+  .wrap main .popularCoffeeContainer .coffeeContainer .btnContainer {
+    width: 100%;
+  }
+}
 @media screen and (max-width: 450px) {
   .wrap header {
     padding: 0 20px;
