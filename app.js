@@ -5,6 +5,10 @@ const fs = require(`fs`)
 const app = express();
 const nodemailer = require("nodemailer");
 require('dotenv').config();
+const TelegramBot = require('node-telegram-bot-api');
+const token = process.env.TOKEN;
+const bot = new TelegramBot(token, { polling: true });
+const chat_id = process.env.CHAT_ID;
 
 const PORT = 3000;
 
