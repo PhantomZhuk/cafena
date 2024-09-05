@@ -109,6 +109,29 @@ app.get('/status', (req, res) => {
     res.json({ currentmail });
 });
 
+app.post(`/sendData`, (req, res) => {
+    console.log(req.body);
+    bot.sendMessage(chat_id, `Нове повідомлення на сайті:\n📱${req.body.phone}\n💬${req.body.message}`)
+})
+
+bot.onText(/\/start/, msg => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Виберіть дію', {
+        reply_markup: {
+            inline_keyboard: [[{ text: 'Контакти', callback_data: 'contacts' }]]
+        }
+    })
+});
+
+bot.on(`callback_query`, query => {
+    const chatId = query.message.chat.id;
+
+    if (query.data == `contacts`) {
+        bot.sendMessage(chatId, `+380974725426`);
+        bot.sendContact(chatId, `+380974725426`, `Cafena`);
+    }
+})
+
 
 app.post(`/signup`, (req, res) => {
     let { login, email, password } = req.body
