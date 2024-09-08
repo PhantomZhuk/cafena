@@ -6,7 +6,8 @@ const e = require('express');
 const router = express.Router();
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
-const ordersFilePath = path.join(__dirname, '../data/orders.json')
+const unconfirmedOrdersFilePath = path.join(__dirname, '../data/unconfirmedOrders.json')
+const confirmedOrdersFilePath = path.join(__dirname, '../data/confirmedOrders.json')
 const emailFilePath = path.join(__dirname, './data/follower.json')
 
 
@@ -22,7 +23,7 @@ router.get(`/`, (req, res) => {
 });
 
 router.get('/unformalizedOrders', (req, res) => {
-    fs.readFile(ordersFilePath, 'utf8', (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ error: 'Unable to read orders file' });
@@ -36,7 +37,7 @@ router.get('/unformalizedOrders', (req, res) => {
 });
 
 router.get(`/orders`, (req, res) => {
-    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
             console.log(err);
             res.status(500).json({ error: 'Unable to read product file' })
@@ -64,7 +65,7 @@ router.post(`/order`, (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+        fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to read orders file' });
             }
@@ -85,7 +86,7 @@ router.post(`/order`, (req, res) => {
                 orders.push(newOrder);
             }
 
-            fs.writeFile(ordersFilePath, JSON.stringify(orders), `utf8`, err => {
+            fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
                 if (err) {
                     return res.status(500).json({ error: 'Unable to write to orders file' });
                 }
@@ -101,7 +102,7 @@ router.post(`/order`, (req, res) => {
 router.post(`/order/confirm`, (req, res) => {
     const { email } = req.body;
 
-    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
         }
@@ -116,7 +117,7 @@ router.post(`/order/confirm`, (req, res) => {
             return order;
         });
 
-        fs.writeFile(ordersFilePath, JSON.stringify(orders), `utf8`, err => {
+        fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to write to orders file' });
             }
@@ -130,7 +131,7 @@ router.post(`/order/confirm`, (req, res) => {
 router.post('/order/reduceNumber', (req, res) => {
     const { productId, quantity } = req.body;
 
-    fs.readFile(ordersFilePath, 'utf8', (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Unable to read orders file' });
         }
@@ -151,7 +152,7 @@ router.post('/order/reduceNumber', (req, res) => {
             orders[orderIndex] = order;
         }
 
-        fs.writeFile(ordersFilePath, JSON.stringify(orders), 'utf8', err => {
+        fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), 'utf8', err => {
             if (err) {
                 return res.status(500).json({ error: 'Unable to write to orders file' });
             }
@@ -164,7 +165,7 @@ router.post('/order/reduceNumber', (req, res) => {
 
 
 router.get(`/list`, (req, res) => {
-    fs.readFile(ordersFilePath, `utf8`, (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
             console.log(err);
             res.status(500).json({ error: 'Unable to read product file' })
