@@ -4,12 +4,75 @@ const fs = require('fs');
 const { error } = require('console');
 const e = require('express');
 const router = express.Router();
+const TelegramBot = require('node-telegram-bot-api');
+const token = process.env.TOKEN;
+const bot = new TelegramBot(token, { polling: true });
+const chat_id = process.env.CHAT_ID;
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
 const unconfirmedOrdersFilePath = path.join(__dirname, '../data/unconfirmedOrders.json')
 const confirmedOrdersFilePath = path.join(__dirname, '../data/confirmedOrders.json')
 const emailFilePath = path.join(__dirname, './data/follower.json')
 
+
+let userPhoneNumber; 
+
+bot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Welcome! Select an action to continue.', {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Start confirmation',
+                        callback_data: 'start_confirmation'
+                    },
+                    {
+                        text: 'Contacts',
+                        callback_data: 'contacts'
+                    }
+                ]
+            ]
+        }
+    });
+});
+
+bot.on('callback_query', (callbackQuery) => {
+    const msg = callbackQuery.message;
+    const chatId = msg.chat.id;
+
+    if (callbackQuery.data === 'start_confirmation') {
+        bot.sendMessage(chatId, `Please send your contact to confirm your order.`, {
+            reply_markup: {
+                keyboard: [
+                    [
+                        {
+                            text: 'Send my contact',
+                            request_contact: true
+                        }
+                    ]
+                ],
+                one_time_keyboard: true
+            }
+        });
+    } else if (callbackQuery.data === 'contacts') {
+        bot.sendMessage(chatId, 'Here are our contacts...');
+    }
+
+    bot.answerCallbackQuery(callbackQuery.id);
+});
+
+bot.on(`contact`, (msg) => {
+    const chatId = msg.chat.id;
+    const contact = msg.contact;
+
+    if (contact) {
+        userPhoneNumber = contact.phone_number;
+        bot.sendMessage(chatId, 'Below is a list of your unconfirmed orders:');
+    } else {
+        bot.sendMessage(chatId, 'Failed to receive contact. Please try again.');
+    }
+})
 
 router.get(`/`, (req, res) => {
     fs.readFile(productsFilePath, `utf8`, (err, data) => {
