@@ -27,13 +27,18 @@ function updateOrderMainCart() {
         .then(res => {
             const data = res.data;
             $('.OredrsContainer').empty();
+
             const uniquePhones = [...new Set(data.map(order => order.phone))];
             for (let phone of uniquePhones) {
+                const userOrder = data.find(order => order.phone === phone);
+                const userName = userOrder ? userOrder.userName : 'Unknown User';
+
                 $('.OredrsContainer').append(
                     `
                     <div class="userOrderContainer">
                         <div class="userHeader">
-                            <h2>${phone}</h2>
+                            <h2>Name: ${userName}</h2>
+                            <h2>Phone: ${phone}</h2>
                         </div>
                         <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
                         </div>
@@ -47,6 +52,7 @@ function updateOrderMainCart() {
             console.error('Error updating cart:', err);
         });
 }
+
 
 function updateOrderCart(data) {
     const uniquePhones = [...new Set(data.map(order => order.phone))];

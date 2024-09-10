@@ -15,7 +15,7 @@ const confirmedOrdersFilePath = path.join(__dirname, '../data/confirmedOrders.js
 const emailFilePath = path.join(__dirname, './data/follower.json')
 
 
-let userPhoneNumber; 
+let userPhoneNumber;
 
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
@@ -163,7 +163,7 @@ router.post(`/order`, (req, res) => {
 
 
 router.post(`/order/confirm`, (req, res) => {
-    const { phone } = req.body;
+    const { phone, name } = req.body;
 
     fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
@@ -176,6 +176,7 @@ router.post(`/order/confirm`, (req, res) => {
             if (!order.orderConfirmed) {
                 order.orderConfirmed = true;
                 order.phone = phone;
+                order.userName = name;
             }
             return order;
         });

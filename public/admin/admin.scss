@@ -236,10 +236,14 @@
 
                 .userHeader {
                     width: 100%;
-                    height: 50px;
+                    min-height: 50px;
                     display: flex;
-                    align-items: center;
+                    flex-direction: column;
                     padding: 0 25px;
+
+                    h2 {
+                        margin-right: 10px;
+                    }
                 }
 
                 .mainOrderContainer {

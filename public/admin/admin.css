@@ -209,10 +209,13 @@
 }
 .wrap main .OredrsContainer .userOrderContainer .userHeader {
   width: 100%;
-  height: 50px;
+  min-height: 50px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   padding: 0 25px;
+}
+.wrap main .OredrsContainer .userOrderContainer .userHeader h2 {
+  margin-right: 10px;
 }
 .wrap main .OredrsContainer .userOrderContainer .mainOrderContainer {
   width: 100%;

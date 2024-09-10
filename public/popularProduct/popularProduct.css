@@ -10,7 +10,7 @@
   height: 240px;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   background-color: #fff;
   padding: 30px 20px;
   border-radius: 10px;
@@ -20,6 +20,7 @@
   margin-left: -150px;
   z-index: 50;
   opacity: 1;
+  box-shadow: 0 0 5px 2px #333;
 }
 .orderVerificationPopup .animate {
   width: 100%;

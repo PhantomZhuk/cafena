@@ -165,30 +165,49 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
 
 $(`#buyBtn`).click(() => {
     let phone = $(`#telInput`).val();
-    let telRegex = /(\+380|0)\d{9}/
-    if (telRegex.test(phone)) {
-        axios.post(`/api/goods/order/confirm`, { phone })
-            .then(res => {
-                console.log(res.data.message);
-                return axios.get(`/api/goods/unformalizedOrders`);
-            })
-            .then(res => {
-                updateCart();
-            })
-            .catch(err => {
-                console.error('Error confirming orders:', err);
-            });
-        $(`#telInput`).val(``)
-        $(`.orderVerificationPopup`).css(`display`, `flex`);
-        $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
-    } else {
-        $(`#telInput`).css(`border`, `2px solid red`);
-        $(`.notification`).text(`Your phone number is incorrect.`);
+    let name = $(`#nameInput`).val();
+    let telRegex = /(\+380)\d{9}/
+    let isValidName = /[a-zA-Zа-яА-ЯіІїЇєЄґҐ'`-]{2,50}/
+    if (isValidName.test(name)) {
+        if (telRegex.test(phone)) {
+            axios.post(`/api/goods/order/confirm`, { phone, name })
+                .then(res => {
+                    console.log(res.data.message);
+                    return axios.get(`/api/goods/unformalizedOrders`);
+                })
+                .then(res => {
+                    updateCart();
+                })
+                .catch(err => {
+                    console.error('Error confirming orders:', err);
+                });
+            $(`#telInput`).val(``)
+            $(`#nameInput`).val(``)
+            $(`.orderVerificationPopup`).css(`display`, `flex`);
+            $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
+            setTimeout(() => {
+                $(`.orderVerificationPopup`).css(`animation`, `none`);
+                $(`.orderVerificationPopup`).css(`display`, `none`);
+            }, 1700);
+        } else {
+            $(`#telInput`).css(`border`, `2px solid red`);
+            $(`.notification`).text(`Your phone number is incorrect.`);
+            $(`.notificationContainer`).css(`display`, `flex`);
+            setTimeout(() => {
+                $(`.notificationContainer`).css(`display`, `none`);
+                $(`#telInput`).css(`border`, `none`);
+                $(`#telInput`).css(`border-bottom`, `1.5px solid #232020`);
+                $(`.notification`).text(``);
+            }, 3000);
+        }
+    }else {
+        $(`#nameInput`).css(`border`, `2px solid red`);
+        $(`.notification`).text(`Your name is incorrect.`);
         $(`.notificationContainer`).css(`display`, `flex`);
         setTimeout(() => {
             $(`.notificationContainer`).css(`display`, `none`);
-            $(`#telInput`).css(`border`, `none`);
-            $(`#telInput`).css(`border-bottom`, `1.5px solid #232020`);
+            $(`#nameInput`).css(`border`, `none`);
+            $(`#nameInput`).css(`border-bottom`, `1.5px solid #232020`);
             $(`.notification`).text(``);
         }, 3000);
     }
