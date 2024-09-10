@@ -14,9 +14,6 @@ const unconfirmedOrdersFilePath = path.join(__dirname, '../data/unconfirmedOrder
 const confirmedOrdersFilePath = path.join(__dirname, '../data/confirmedOrders.json')
 const emailFilePath = path.join(__dirname, './data/follower.json')
 
-
-let userPhoneNumber;
-
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Welcome! Select an action to continue.', {
@@ -67,8 +64,25 @@ bot.on(`contact`, (msg) => {
     const contact = msg.contact;
 
     if (contact) {
-        userPhoneNumber = contact.phone_number;
+        let userPhoneNumber = contact.phone_number;
+        let formattedPhoneNumber = `+${userPhoneNumber}`;
         bot.sendMessage(chatId, 'Below is a list of your unconfirmed orders:');
+        fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
+            if (err) {
+                console.log(err);
+                res.status(500).json({ error: 'Unable to read product file' })
+            }
+            const orders = JSON.parse(data)
+            const Orders = orders.filter(order => order.orderConfirmed);
+            let totalPrice = 0;
+            for(let el of Orders){
+                if(formattedPhoneNumber == el.phone || userPhoneNumber == el.phone){
+                    bot.sendMessage(chatId, `Name: ${el.name}\nPrice: ${el.price}`);
+                    totalPrice+=el.price
+                }
+            }
+            bot.sendMessage(chatId, `Total price: ${totalPrice}`);
+        })
     } else {
         bot.sendMessage(chatId, 'Failed to receive contact. Please try again.');
     }
