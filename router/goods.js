@@ -163,7 +163,7 @@ router.post(`/order`, (req, res) => {
 
 
 router.post(`/order/confirm`, (req, res) => {
-    const { email } = req.body;
+    const { phone } = req.body;
 
     fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
@@ -175,7 +175,7 @@ router.post(`/order/confirm`, (req, res) => {
         orders = orders.map(order => {
             if (!order.orderConfirmed) {
                 order.orderConfirmed = true;
-                order.email = email;
+                order.phone = phone;
             }
             return order;
         });

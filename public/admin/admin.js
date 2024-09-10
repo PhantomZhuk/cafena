@@ -27,15 +27,15 @@ function updateOrderMainCart() {
         .then(res => {
             const data = res.data;
             $('.OredrsContainer').empty();
-            const uniqueEmails = [...new Set(data.map(order => order.email))];
-            for (let email of uniqueEmails) {
+            const uniquePhones = [...new Set(data.map(order => order.phone))];
+            for (let phone of uniquePhones) {
                 $('.OredrsContainer').append(
                     `
                     <div class="userOrderContainer">
                         <div class="userHeader">
-                            <h2>${email}</h2>
+                            <h2>${phone}</h2>
                         </div>
-                        <div class="mainOrderContainer" id="ordersFor_${email.replace(/[@.]/g, '_')}">
+                        <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
                         </div>
                     </div>
                     `
@@ -49,14 +49,14 @@ function updateOrderMainCart() {
 }
 
 function updateOrderCart(data) {
-    const uniqueEmails = [...new Set(data.map(order => order.email))];
+    const uniquePhones = [...new Set(data.map(order => order.phone))];
 
-    for (let email of uniqueEmails) {
-        const ordersForEmail = data.filter(order => order.email === email);
-        const emailContainer = $(`#ordersFor_${email.replace(/[@.]/g, '_')}`);
+    for (let phone of uniquePhones) {
+        const ordersForPhone = data.filter(order => order.phone === phone);
+        const phoneContainer = $(`#ordersFor_${phone.replace(/[\s()\-+]/g, '_')}`);
 
-        for (let el of ordersForEmail) {
-            emailContainer.append(
+        for (let el of ordersForPhone) {
+            phoneContainer.append(
                 `
                 <div class="productInCart">
                     <div class="imgContainer">
@@ -77,6 +77,7 @@ function updateOrderCart(data) {
 }
 
 updateOrderMainCart();
+
 
 let numberFollower = 0;
 $(`#numberFollower`).text(numberFollower)
@@ -134,34 +135,8 @@ function getStatus() {
         });
 }
 
-// let hours = 0;
-// let minutes = 0;
-// let seconds = 0;
 $(`#sendMessage`).click(() => {
     let massage = $(`#messageText`).val();
-
-
-    // let totalSecond = numberFollower;
-    // function convertSecondsToTime(totalSecond){
-    //     hours = Math.floor(totalSecond / 3600);
-    //     minutes = Math.floor((totalSecond % 3600) / 60);
-    //     seconds = totalSecond % 60;
-
-    //     let formattedHours = hours < 10 ? '0' + hours : hours;
-    //     let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-    //     let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-
-    //     $(`.hour`).text(formattedHours);
-    //     $(`.minute`).text(formattedMinutes);
-    //     $(`.second`).text(formattedSeconds);    
-    // }
-
-    // convertSecondsToTime(totalSecond);
-
-    // let timeStatus = setInterval(() => {
-    //     totalSecond--
-    //     convertSecondsToTime(totalSecond);
-    // }, 1000);;
 
     $(`.notificationContainer`).css(`display`, `flex`);
     $(`.notification`).text(`The shipment is underway!`);

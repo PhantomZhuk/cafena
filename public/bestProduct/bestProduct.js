@@ -164,16 +164,10 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
 });
 
 $(`#buyBtn`).click(() => {
-    $(`.orderVerificationPopup`).css(`display`, `flex`);
-    $(`.wrap`).css(`filter`, `blur(5px)`);
-    $(`#emailIn`).focus();
-});
-
-$(`#sendEmailBtn`).click(() => {
-    let email = $(`#emailIn`).val();
-    let emailRegex = /([a-z\d]{3,64})+@([a-z]{3,255})+\.[a-z]{2,63}/;
-    if (emailRegex.test(email)) {
-        axios.post(`/api/goods/order/confirm`, { email })
+    let phone = $(`#telInput`).val();
+    let telRegex = /(\+380|0)\d{9}/
+    if (telRegex.test(phone)) {
+        axios.post(`/api/goods/order/confirm`, { phone })
             .then(res => {
                 console.log(res.data.message);
                 return axios.get(`/api/goods/unformalizedOrders`);
@@ -184,25 +178,17 @@ $(`#sendEmailBtn`).click(() => {
             .catch(err => {
                 console.error('Error confirming orders:', err);
             });
-
+        $(`#telInput`).val(``)
+        $(`.orderVerificationPopup`).css(`display`, `flex`);
         $(`.orderVerificationPopup`).css(`animation`, `1.7s ease forwards draw`);
-        $(`.animate`).css(`display`, `flex`);
-        $(`.emailInputContainer`).css(`display`, `none`);
-
-        setTimeout(() => {
-            $(`.orderVerificationPopup`).css(`display`, `none`);
-            $(`.orderVerificationPopup`).css(`animation`, `none`);
-            $(`.emailInputContainer`).css(`display`, `flex`);
-            $(`.animate`).css(`display`, `none`);
-            $(`.wrap`).css(`filter`, `blur(0px)`);
-        }, 1700);
     } else {
-        $(`#emailIn`).css(`border`, `2px solid red`);
-        $(`.notification`).text(`Your email isn't correct.`);
+        $(`#telInput`).css(`border`, `2px solid red`);
+        $(`.notification`).text(`Your phone number is incorrect.`);
         $(`.notificationContainer`).css(`display`, `flex`);
         setTimeout(() => {
             $(`.notificationContainer`).css(`display`, `none`);
-            $(`#emailIn`).css(`border`, `none`);
+            $(`#telInput`).css(`border`, `none`);
+            $(`#telInput`).css(`border-bottom`, `1.5px solid #232020`);
             $(`.notification`).text(``);
         }, 3000);
     }

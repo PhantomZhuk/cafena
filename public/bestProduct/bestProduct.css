@@ -21,40 +21,10 @@
   z-index: 50;
   opacity: 1;
 }
-.orderVerificationPopup .emailInputContainer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-.orderVerificationPopup .emailInputContainer h2 {
-  font-size: 16px;
-  text-align: center;
-}
-.orderVerificationPopup .emailInputContainer input {
-  border: none;
-  border-bottom: 1.5px solid #232020;
-  outline: none;
-  padding-left: 10px;
-  font-size: 16px;
-  width: 80%;
-  height: 40px;
-}
-.orderVerificationPopup .emailInputContainer button {
-  padding: 12px 40px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background-color: #232020;
-  color: #fff;
-  font-size: 16px;
-}
 .orderVerificationPopup .animate {
   width: 100%;
   height: 100%;
-  display: none;
+  display: flex;
 }
 .orderVerificationPopup path {
   stroke-dasharray: 99.4757843018;
@@ -169,7 +139,7 @@
   padding: 0 110px;
 }
 .wrap main .cartContainer {
-  position: absolute;
+  position: fixed;
   width: 350px;
   height: 100vh;
   background-color: #fff;
@@ -179,6 +149,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 }
 .wrap main .cartContainer .cartHeader {
   width: 100%;
@@ -255,10 +226,22 @@
 }
 .wrap main .cartContainer .btnContainer {
   width: 100%;
-  height: 100px;
+  min-height: 100px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+}
+.wrap main .cartContainer .btnContainer input {
+  border: none;
+  border-bottom: 1.5px solid #232020;
+  outline: none;
+  padding-left: 10px;
+  font-size: 16px;
+  width: 80%;
+  height: 40px;
+  margin-bottom: 20px;
 }
 .wrap main .cartContainer .btnContainer button {
   padding: 10px 52px;
