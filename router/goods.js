@@ -75,10 +75,10 @@ bot.on(`contact`, (msg) => {
             const orders = JSON.parse(data)
             const Orders = orders.filter(order => order.orderConfirmed);
             let totalPrice = 0;
-            for(let el of Orders){
-                if(formattedPhoneNumber == el.phone || userPhoneNumber == el.phone){
+            for (let el of Orders) {
+                if (formattedPhoneNumber == el.phone || userPhoneNumber == el.phone) {
                     bot.sendMessage(chatId, `Name: ${el.name}\nPrice: ${el.price}`);
-                    totalPrice+=el.price
+                    totalPrice += el.price
                 }
             }
             bot.sendMessage(chatId, `Total price: ${totalPrice}`);
@@ -127,49 +127,36 @@ router.get(`/orders`, (req, res) => {
 
 
 router.post(`/order`, (req, res) => {
-    const { productId, quantity } = req.body;
+    const { cart } = req.body;
 
-    fs.readFile(productsFilePath, `utf8`, (err, data) => {
+    fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
-            console.log(err);
-            return res.status(500).json({ error: 'Unable to read product file' });
+            return res.status(500).json({ error: 'Unable to read orders file' });
         }
 
-        const products = JSON.parse(data);
-        let product = products.find(el => el.id == productId);
-
-        if (!product) {
-            return res.status(404).json({ error: 'Product not found' });
+        const orders = JSON.parse(data);
+        for (let order of cart) {
+            let newOrder = {
+                name: order.name,
+                price: order.price,
+                img: order.img,
+                userName: order.userName,
+                totalPrice: order.totalPrice,
+                phone: order.phone,
+                orderConfirmed: false,
+                quantity: order.quantity,
+                orderDate: new Date().toLocaleString(),
+                orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3)
+            };
+            orders.push(newOrder);
         }
 
-        fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
+        fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
-                return res.status(500).json({ error: 'Unable to read orders file' });
+                return res.status(500).json({ error: 'Unable to write to orders file' });
             }
 
-            const orders = JSON.parse(data);
-            let existingOrder = orders.find(order => order.id == productId && !order.orderConfirmed);
-
-            if (existingOrder) {
-                existingOrder.quantity += quantity;
-            } else {
-                let newOrder = {
-                    ...product,
-                    orderConfirmed: false,
-                    quantity: quantity,
-                    orderDate: new Date().toLocaleString(),
-                    orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3)
-                };
-                orders.push(newOrder);
-            }
-
-            fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
-                if (err) {
-                    return res.status(500).json({ error: 'Unable to write to orders file' });
-                }
-
-                res.json({ message: 'Order processed successfully' });
-            });
+            res.json({ message: 'Order processed successfully' });
         });
     });
 });

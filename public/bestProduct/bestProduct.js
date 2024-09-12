@@ -14,7 +14,6 @@ function loadingProducts() {
     axios.get(`/api/goods`)
         .then(res => {
             const data = res.data;
-            console.log(data);
 
             for (el of data) {
                 if (el.category == "best") {
@@ -73,57 +72,82 @@ $(`.fa-xmark`).click(() => {
     $(`.cartContainer`).css(`display`, `none`);
 });
 
-function updateCart() {
-    axios.get(`/api/goods/unformalizedOrders`)
-        .then(res => {
-            const data = res.data;
-            $('.productContainer').empty();
+let cart = $.cookie(`cart`) ? JSON.parse($.cookie(`cart`)) : [];
 
-            data.forEach(el => {
-                $('.productContainer').append(
-                    `
-                    <div class="productInCart">
-                        <img src="./${el.img}" alt="photo">
-                        <div class="textContainer">
-                            <h4 class="name">${el.name}</h4>
-                            <div class="bottomBlock">
-                                <div class="quantityProductContainer">
-                                    <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
-                                    <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity}</div>
-                                    <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
-                                </div>
-                                <p class="price">${el.price * el.quantity}$</p>
-                            </div>
+function updateCart() {
+    for (let el of cart) {
+        $('.productContainer').append(
+            `
+            <div class="productInCart">
+                <img src="./${el.img}" alt="photo">
+                <div class="textContainer">
+                    <h4 class="name">${el.name}</h4>
+                    <div class="bottomBlock">
+                        <div class="quantityProductContainer">
+                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
+                            <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity}</div>
+                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
                         </div>
+                        <p class="price" id="price${el.id}">${el.price * el.quantity}$</p>
                     </div>
-                    `
-                );
-            });
-        })
-        .catch(err => {
-            console.error('Error updating cart:', err);
-        });
+                </div>
+            </div>
+            `
+        );
+    }
 }
 
 updateCart();
 
 $(`.cardContainer`).click((e) => {
-    const productId = e.target.id;
-    const quantity = 1;
-    console.log(productId)
+    let ID = e.target.id;
+    let quantity = 1;
 
-    axios.post(`/api/goods/order`, { productId, quantity })
+    axios.get(`/api/goods`)
         .then(res => {
-            console.log(res.data.message);
-            return axios.get(`/api/goods/unformalizedOrders`);
+            const data = res.data;
+            for (let el of data) {
+                if (el.category == "best" && ID == el.id) {
+                    const exists = cart.find(item => item.id === ID);
+
+                    if (exists) {
+                        exists.quantity += 1;
+                        $(`#quantityProduct${ID}`).text(exists.quantity);
+                        $(`#price${ID}`).text(exists.price * exists.quantity + ` $`);
+                    } else {
+                        cart.push({
+                            img: el.img,
+                            name: el.name,
+                            price: el.price,
+                            id: ID,
+                            quantity: quantity
+                        });
+
+                        $('.productContainer').append(
+                            `
+                            <div class="productInCart">
+                                <img src="./${el.img}" alt="photo">
+                                <div class="textContainer">
+                                    <h4 class="name">${el.name}</h4>
+                                    <div class="bottomBlock">
+                                        <div class="quantityProductContainer">
+                                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
+                                            <div class="quantityProduct" id="quantityProduct${el.id}">${quantity}</div>
+                                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
+                                        </div>
+                                        <p class="price" id="price${el.id}">${el.price * quantity} $</p>
+                                    </div>
+                                </div>
+                            </div>
+                            `
+                        );
+                    }
+                    $.cookie(`cart`, JSON.stringify(cart));
+                }
+            }
         })
-        .then(res => {
-            updateCart();
-        })
-        .catch(err => {
-            console.error('Error processing the order:', err);
-        });
 });
+
 
 $('.productContainer').on('click', '.fa-minus', (e) => {
     let productId = $(e.target).attr('id').replace('minus', '');
@@ -131,19 +155,21 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
     let quantity = parseInt(quantityElement.text());
 
     if (quantity > 0) {
-        axios.post(`/api/goods/order/reduceNumber`, { productId, quantity: 1 })
-            .then(res => {
+        for (let el of cart) {
+            if (el.id == productId) {
                 if (quantity - 1 === 0) {
+                    cart.splice(cart.indexOf(el), 1);
+                    $.cookie(`cart`, JSON.stringify(cart));
                     quantityElement.closest('.productInCart').remove();
                 } else {
                     quantityElement.text(quantity - 1);
+                    el.quantity = quantity - 1;
+                    $.cookie(`cart`, JSON.stringify(cart));
+                    $(`#price${el.id}`).text(el.price * el.quantity + `$`);
                 }
-                console.log(res.data.message);
-                updateCart();
-            })
-            .catch(err => {
-                console.error('Error reducing quantity:', err);
-            });
+                break;
+            }
+        }
     }
 });
 
@@ -152,30 +178,34 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
     let quantityElement = $(e.target).closest('.productContainer').find(`#quantityProduct${productId}`);
     let quantity = parseInt(quantityElement.text());
 
-    axios.post(`/api/goods/order`, { productId, quantity: 1 })
-        .then(res => {
+    for (let el of cart) {
+        if (el.id == productId) {
             quantityElement.text(quantity + 1);
-            console.log(res.data.message);
-            updateCart();
-        })
-        .catch(err => {
-            console.error('Error adding quantity:', err);
-        });
+            el.quantity = quantity + 1;
+            $.cookie(`cart`, JSON.stringify(cart));
+            $(`#price${el.id}`).text(el.price * el.quantity + `$`);
+            break;
+        }
+    }
 });
 
 $(`#buyBtn`).click(() => {
     let phone = $(`#telInput`).val();
-    let name = $(`#nameInput`).val();
+    let userName = $(`#nameInput`).val();
     let telRegex = /(\+380)\d{9}/
     let isValidName = /[a-zA-Zа-яА-ЯіІїЇєЄґҐ'`-]{2,50}/
-    if (isValidName.test(name)) {
+    if (isValidName.test(userName)) {
         if (telRegex.test(phone)) {
-            axios.post(`/api/goods/order/confirm`, { phone, name })
+            for (let el of cart) {
+                el.phone = phone;
+                el.userName = userName;
+            }
+            axios.post(`/api/goods/order`, { cart })
                 .then(res => {
                     console.log(res.data.message);
-                    return axios.get(`/api/goods/unformalizedOrders`);
-                })
-                .then(res => {
+                    cart = [];
+                    $('.productContainer').empty();
+                    $.cookie(`cart`, JSON.stringify(cart));
                     updateCart();
                 })
                 .catch(err => {
@@ -200,7 +230,7 @@ $(`#buyBtn`).click(() => {
                 $(`.notification`).text(``);
             }, 3000);
         }
-    }else {
+    } else {
         $(`#nameInput`).css(`border`, `2px solid red`);
         $(`.notification`).text(`Your name is incorrect.`);
         $(`.notificationContainer`).css(`display`, `flex`);
