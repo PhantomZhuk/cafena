@@ -73,15 +73,21 @@ bot.on(`contact`, (msg) => {
                 res.status(500).json({ error: 'Unable to read product file' })
             }
             const orders = JSON.parse(data)
-            const Orders = orders.filter(order => order.orderConfirmed);
+            const Orders = orders.filter(order => order.orderConfirmed == false);
+            let message = '';
             let totalPrice = 0;
+
             for (let el of Orders) {
                 if (formattedPhoneNumber == el.phone || userPhoneNumber == el.phone) {
-                    bot.sendMessage(chatId, `Name: ${el.name}\nPrice: ${el.price}`);
-                    totalPrice += el.price
+                    message += `Name: ${el.name}\nPrice: ${el.price}\n\n`; 
+                    totalPrice += el.price;
                 }
             }
-            bot.sendMessage(chatId, `Total price: ${totalPrice}`);
+
+            if (message !== '') {
+                message += `Total Price: ${totalPrice}`;
+                bot.sendMessage(chatId, message);
+            }
         })
     } else {
         bot.sendMessage(chatId, 'Failed to receive contact. Please try again.');
@@ -120,7 +126,7 @@ router.get(`/orders`, (req, res) => {
             res.status(500).json({ error: 'Unable to read product file' })
         }
         const orders = JSON.parse(data)
-        const Orders = orders.filter(order => order.orderConfirmed);
+        const Orders = orders.filter(order => order.orderConfirmed == false);
         res.json(Orders);
     })
 });
