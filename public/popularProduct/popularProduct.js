@@ -123,6 +123,12 @@ $(`.popularCoffeeContainer`).click((e) => {
                             </div>
                             `
                         );
+                        $(`.notification`).text(`Product added to cart!`);
+                        $(`.notificationContainer`).css(`display`, `flex`);
+                        setTimeout(() => {
+                            $(`.notification`).text(``);
+                            $(`.notificationContainer`).css(`display`, `none`);
+                        }, 3000);
                     }
                     $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                 }
