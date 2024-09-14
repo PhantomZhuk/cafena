@@ -646,11 +646,47 @@
                     height: 90px;
                 }
             }
+
+            .cartContainer {
+                width: 100%;
+
+                .productContainer {
+                    padding: 0 50px;
+
+                    .productInCart {
+                        img {
+                            width: 30%;
+                        }
+
+                        .textContainer {
+                            .bottomBlock {
+                                padding: 0 10px 0 40px;
+
+                                .quantityProductContainer {
+                                    width: 50%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         footer {
             .topFooterContainer {
                 padding: 50px 20px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .wrap {
+        main {
+            .cartContainer {
+                .productContainer {
+                    padding: 0 20px;
+                }
             }
         }
     }

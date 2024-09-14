@@ -526,7 +526,27 @@
   .wrap main .popularCoffeeContainer .coffeeContainer {
     height: 90px;
   }
+  .wrap main .cartContainer {
+    width: 100%;
+  }
+  .wrap main .cartContainer .productContainer {
+    padding: 0 50px;
+  }
+  .wrap main .cartContainer .productContainer .productInCart img {
+    width: 30%;
+  }
+  .wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock {
+    padding: 0 10px 0 40px;
+  }
+  .wrap main .cartContainer .productContainer .productInCart .textContainer .bottomBlock .quantityProductContainer {
+    width: 50%;
+  }
   .wrap footer .topFooterContainer {
     padding: 50px 20px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .wrap main .cartContainer .productContainer {
+    padding: 0 20px;
   }
 }/*# sourceMappingURL=popularProduct.css.map */
