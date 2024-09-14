@@ -72,7 +72,8 @@ $(`.fa-xmark`).click(() => {
     $(`.cartContainer`).css(`display`, `none`);
 });
 
-let cart = $.cookie(`cart`) ? JSON.parse($.cookie(`cart`)) : [];
+let cart = ($.cookie(`cart`) && JSON.parse($.cookie(`cart`))) || [];
+$.cookie(`cart`, JSON.stringify(cart), { path: '/' });
 
 function updateCart() {
     for (let el of cart) {
@@ -142,7 +143,7 @@ $(`.cardContainer`).click((e) => {
                             `
                         );
                     }
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                 }
             }
         })
@@ -159,12 +160,12 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
             if (el.id == productId) {
                 if (quantity - 1 === 0) {
                     cart.splice(cart.indexOf(el), 1);
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     quantityElement.closest('.productInCart').remove();
                 } else {
                     quantityElement.text(quantity - 1);
                     el.quantity = quantity - 1;
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     $(`#price${el.id}`).text(el.price * el.quantity + `$`);
                 }
                 break;
@@ -182,7 +183,7 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
         if (el.id == productId) {
             quantityElement.text(quantity + 1);
             el.quantity = quantity + 1;
-            $.cookie(`cart`, JSON.stringify(cart));
+            $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
             $(`#price${el.id}`).text(el.price * el.quantity + `$`);
             break;
         }
@@ -205,7 +206,7 @@ $(`#buyBtn`).click(() => {
                     console.log(res.data.message);
                     cart = [];
                     $('.productContainer').empty();
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     updateCart();
                 })
                 .catch(err => {

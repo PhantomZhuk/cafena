@@ -52,7 +52,9 @@ $(`.fa-xmark`).click(() => {
     $(`.cartContainer`).css(`display`, `none`);
 });
 
-let cart = $.cookie(`cart`) ? JSON.parse($.cookie(`cart`)) : [];
+// Зчитування кукі
+let cart = ($.cookie(`cart`) && JSON.parse($.cookie(`cart`))) || [];
+$.cookie(`cart`, JSON.stringify(cart), { path: '/' });
 
 function updateCart() {
     for (let el of cart) {
@@ -122,7 +124,7 @@ $(`.popularCoffeeContainer`).click((e) => {
                             `
                         );
                     }
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                 }
             }
         })
@@ -139,12 +141,12 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
             if (el.id == productId) {
                 if (quantity - 1 === 0) {
                     cart.splice(cart.indexOf(el), 1);
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     quantityElement.closest('.productInCart').remove();
                 } else {
                     quantityElement.text(quantity - 1);
                     el.quantity = quantity - 1;
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     $(`#price${el.id}`).text(el.price * el.quantity + `$`);
                 }
                 break;
@@ -162,7 +164,7 @@ $('.productContainer').on('click', '.fa-plus', (e) => {
         if (el.id == productId) {
             quantityElement.text(quantity + 1);
             el.quantity = quantity + 1;
-            $.cookie(`cart`, JSON.stringify(cart));
+            $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
             $(`#price${el.id}`).text(el.price * el.quantity + `$`);
             break;
         }
@@ -185,7 +187,7 @@ $(`#buyBtn`).click(() => {
                     console.log(res.data.message);
                     cart = [];
                     $('.productContainer').empty();
-                    $.cookie(`cart`, JSON.stringify(cart));
+                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     updateCart();
                 })
                 .catch(err => {
@@ -237,64 +239,32 @@ $(`#subscribeBtn`).click(() => {
             axios.post(`/sendConfirmationEmail`, { email })
                 .then(res => {
                     console.log(res.data.message);
-                    if (res.data.message == `Code sent`) {
-                        $('#emailSubscriber').removeClass('email');
-                        $('#emailSubscriber').addClass('code');
-                        $('#emailSubscriber').attr("placeholder", "Enter the code sent to your email.");
-                        $(`.notification`).text(`The code was sent to your email!`);
+                    if (res.data.message == `Success`) {
                         $(`.notificationContainer`).css(`display`, `flex`);
+                        $(`.notification`).text(`Please check your email and confirm the subscription.`);
                         setTimeout(() => {
                             $(`.notificationContainer`).css(`display`, `none`);
-                            $(`#emailSubscriber`).css(`border`, `none`);
                             $(`.notification`).text(``);
-                        }, 3000);
-                    } else if (res.data.message == `This email already exists`) {
-                        $(`#emailSubscriber`).css(`border`, `2px solid red`);
-                        $(`.notification`).text(`This email is already signed!`);
+                        }, 4000);
+                    } else {
                         $(`.notificationContainer`).css(`display`, `flex`);
+                        $(`.notification`).text(`Something went wrong. Please try again.`);
                         setTimeout(() => {
                             $(`.notificationContainer`).css(`display`, `none`);
-                            $(`#emailSubscriber`).css(`border`, `none`);
                             $(`.notification`).text(``);
-                        }, 3000);
+                        }, 4000);
                     }
                 })
         } else {
-            $(`#emailSubscriber`).css(`border`, `2px solid red`);
-            $(`.notification`).text(`Your email isn't correct.`);
+            $(`#emailSubscriber`).css(`border`, `1px solid red`);
+            $(`#emailSubscriber`).val(``);
+            $(`.notification`).text(`Invalid email address.`);
             $(`.notificationContainer`).css(`display`, `flex`);
             setTimeout(() => {
                 $(`.notificationContainer`).css(`display`, `none`);
-                $(`#emailSubscriber`).css(`border`, `none`);
+                $(`#emailSubscriber`).css(`border`, `1px solid black`);
                 $(`.notification`).text(``);
-            }, 3000);
+            }, 4000);
         }
-    } else if ($(`#emailSubscriber`).hasClass(`code`)) {
-        $('#emailSubscriber').attr("placeholder", "Enter your email.");
-        let code = $(`.code`).val();
-        $('#emailSubscriber').addClass('email');
-        $('#emailSubscriber').removeClass('code');
-        $(`#emailSubscriber`).val(``);
-        axios.post(`/subscribe`, { email, code })
-            .then(res => {
-                console.log(res.data.massage);
-                if (res.data.massage == `data saved`) {
-                    $(`.notification`).text(`You have subscribed to the newsletter.`);
-                    $(`.notificationContainer`).css(`display`, `flex`);
-                    setTimeout(() => {
-                        $(`.notificationContainer`).css(`display`, `none`);
-                        $(`.notification`).text(``);
-                    }, 3000);
-                } else {
-                    $(`#emailSubscriber`).css(`border`, `2px solid red`);
-                    $(`.notification`).text(`Code isn't correct.`);
-                    $(`.notificationContainer`).css(`display`, `flex`);
-                    setTimeout(() => {
-                        $(`.notificationContainer`).css(`display`, `none`);
-                        $(`#emailSubscriber`).css(`border`, `none`);
-                        $(`.notification`).text(``);
-                    }, 3000);
-                }
-            })
     }
 });
