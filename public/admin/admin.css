@@ -211,11 +211,45 @@
   width: 100%;
   min-height: 50px;
   display: flex;
-  flex-direction: column;
-  padding: 0 25px;
+  justify-content: space-between;
+  padding: 20px 25px 0 25px;
 }
-.wrap main .OredrsContainer .userOrderContainer .userHeader h2 {
+.wrap main .OredrsContainer .userOrderContainer .userHeader .textContainer {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wrap main .OredrsContainer .userOrderContainer .userHeader .textContainer h2 {
   margin-right: 10px;
+}
+.wrap main .OredrsContainer .userOrderContainer .userHeader .orderStatusContainer {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.wrap main .OredrsContainer .userOrderContainer .userHeader .orderStatusContainer .orderStatus {
+  padding: 0 20px;
+  height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  color: #fff;
+  border-radius: 10px;
+}
+.wrap main .OredrsContainer .userOrderContainer .userHeader .orderStatusContainer .orderStatus .status {
+  width: 100%;
+  height: 100%;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  background-color: red;
+  cursor: pointer;
+  outline: none;
 }
 .wrap main .OredrsContainer .userOrderContainer .mainOrderContainer {
   width: 100%;

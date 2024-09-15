@@ -22,68 +22,89 @@ $(`#clearingFollowers`).click(() => {
     $(`.sendMessageContactor`).css(`display`, `flex`);
 });
 
+
 function updateOrderMainCart() {
-    axios.get(`/api/goods/orders`)
+    axios.get('/api/goods/orders')
         .then(res => {
             const data = res.data;
             $('.OredrsContainer').empty();
 
-            const uniquePhones = [...new Set(data.map(order => order.phone))];
-            for (let phone of uniquePhones) {
-                const userOrder = data.find(order => order.phone === phone);
-                const userName = userOrder ? userOrder.userName : 'Unknown User';
+            const confirmedOrders = data.filter(order => order.status === 'confirmed');
+            const unconfirmedOrders = data.filter(order => order.status === 'unconfirmed');
+
+            for (let user of confirmedOrders) {
+                const { userName, phone, status, orders } = user;
 
                 $('.OredrsContainer').prepend(
-                    `
-                    <div class="userOrderContainer">
+                    `<div class="userOrderContainer">
                         <div class="userHeader">
-                            <h2>Name: ${userName}</h2>
-                            <h2>Phone: ${phone}</h2>
+                            <div class="textContainer">
+                                <h2>Name: ${userName}</h2>
+                                <h2>Phone: ${phone}</h2>
+                            </div>
+                            <div class="orderStatusContainer">
+                                <div class="orderStatus"><h4>Status: ${status}</h4></div>
+                            </div>
                         </div>
                         <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
                         </div>
-                    </div>
-                    `
-                );                
+                    </div>`
+                );
+
+                updateOrderCart(phone, orders);
             }
-            updateOrderCart(data);
+
+            for (let user of unconfirmedOrders) {
+                const { userName, phone, status, orders } = user;
+
+                $('.OredrsContainer').append(
+                    `<div class="userOrderContainer">
+                        <div class="userHeader">
+                            <div class="textContainer">
+                                <h2>Name: ${userName}</h2>
+                                <h2>Phone: ${phone}</h2>
+                            </div>
+                            <div class="orderStatusContainer">
+                                <div class="orderStatus"><h4>Status: ${status}</h4></div>
+                            </div>
+                        </div>
+                        <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
+                        </div>
+                    </div>`
+                );
+
+                updateOrderCart(phone, orders);
+            }
         })
         .catch(err => {
             console.error('Error updating cart:', err);
         });
 }
 
+function updateOrderCart(phone, orders) {
+    const phoneContainer = $(`#ordersFor_${phone.replace(/[\s()\-+]/g, '_')}`);
 
-function updateOrderCart(data) {
-    const uniquePhones = [...new Set(data.map(order => order.phone))];
-
-    for (let phone of uniquePhones) {
-        const ordersForPhone = data.filter(order => order.phone === phone);
-        const phoneContainer = $(`#ordersFor_${phone.replace(/[\s()\-+]/g, '_')}`);
-
-        for (let el of ordersForPhone) {
-            phoneContainer.append(
-                `
-                <div class="productInCart">
-                    <div class="imgContainer">
-                        <img src="./${el.img}" alt="photo">
-                    </div>
-                    <div class="textContainer">
-                        <h4 class="name">${el.name}</h4>
-                        <div class="bottomBlock">
-                            <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity} Qty</div>
-                            <p class="price">${el.price} $</p>
-                        </div>
+    for (let el of orders) {
+        phoneContainer.append(
+            `
+            <div class="productInCart">
+                <div class="imgContainer">
+                    <img src="./${el.img}" alt="photo">
+                </div>
+                <div class="textContainer">
+                    <h4 class="name">${el.name}</h4>
+                    <div class="bottomBlock">
+                        <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity} Qty</div>
+                        <p class="price">${el.price} $</p>
                     </div>
                 </div>
-                `
-            );
-        }
+            </div>
+            `
+        );
     }
 }
 
 updateOrderMainCart();
-
 
 let numberFollower = 0;
 $(`#numberFollower`).text(numberFollower)

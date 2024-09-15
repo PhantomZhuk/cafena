@@ -105,20 +105,6 @@ router.get(`/`, (req, res) => {
     })
 });
 
-router.get('/unformalizedOrders', (req, res) => {
-    fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: 'Unable to read orders file' });
-        }
-
-        const orders = JSON.parse(data);
-        const unformalizedOrders = orders.filter(order => !order.orderConfirmed);
-
-        res.json(unformalizedOrders);
-    });
-});
-
 router.get(`/orders`, (req, res) => {
     fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
         if (err) {
@@ -126,7 +112,7 @@ router.get(`/orders`, (req, res) => {
             res.status(500).json({ error: 'Unable to read product file' })
         }
         const orders = JSON.parse(data)
-        const Orders = orders.filter(order => order.orderConfirmed == false);
+        const Orders = orders.filter(order => !order.orderConfirmed);
         res.json(Orders);
     })
 });
@@ -140,21 +126,34 @@ router.post(`/order`, (req, res) => {
             return res.status(500).json({ error: 'Unable to read orders file' });
         }
 
-        const orders = JSON.parse(data);
+        let orders = JSON.parse(data);
+
         for (let order of cart) {
-            let newOrder = {
-                name: order.name,
+            let existingUser = orders.find(o => o.phone === order.phone);
+
+            let newOrderDetails = {
                 price: order.price,
                 img: order.img,
-                userName: order.userName,
+                name: order.name,
                 totalPrice: order.totalPrice,
-                phone: order.phone,
                 orderConfirmed: false,
                 quantity: order.quantity,
                 orderDate: new Date().toLocaleString(),
-                orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3)
+                orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3),
             };
-            orders.push(newOrder);
+
+            if (existingUser) {
+                existingUser.orders = existingUser.orders || [];
+                existingUser.orders.push(newOrderDetails);
+            } else {
+                let newOrder = {
+                    userName: order.userName,
+                    phone: order.phone,
+                    status: 'unconfirmed',
+                    orders: [newOrderDetails]
+                };
+                orders.push(newOrder);
+            }
         }
 
         fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
@@ -166,6 +165,7 @@ router.post(`/order`, (req, res) => {
         });
     });
 });
+
 
 
 
