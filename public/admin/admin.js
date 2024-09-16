@@ -47,6 +47,7 @@ function updateOrderMainCart() {
                                             <option value="processing">Processing</option>
                                             <option value="shipped">Shipped</option>
                                             <option value="arrived">Arrived</option>
+                                            <option value="fulfilled">Fulfilled</option>
                                         </select>
                                     </div>
                                 </div>
@@ -58,7 +59,7 @@ function updateOrderMainCart() {
                     $(`#statusSelect_${phone.replace(/[\s()\-+]/g, ``)}_${status}`).val(status);
                     updateOrderCart(phone, orders, status);
                 }else{
-                    $('.OredrsContainer').append(
+                    $('.OredrsContainer').prepend(
                         `<div class="userOrderContainer">
                             <div class="userHeader">
                                 <div class="textContainer">
@@ -74,6 +75,7 @@ function updateOrderMainCart() {
                                             <option value="processing">Processing</option>
                                             <option value="shipped">Shipped</option>
                                             <option value="arrived">Arrived</option>
+                                            <option value="fulfilled">Fulfilled</option>
                                         </select>
                                     </div>
                                 </div>

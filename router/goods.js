@@ -81,7 +81,7 @@ bot.on('contact', (msg) => {
 
             for (let el of ordersUnconfirmed) {
                 for (let order of el.orders) {
-                    message += `Name: ${order.name}\nPrice: ${order.price}\n\n`;
+                    message += `Name: ${order.name}\nQuantity: ${order.quantity}\nPrice: ${order.price}\n\n`;
                     totalPrice += order.price;
                 }
             }
@@ -148,7 +148,13 @@ router.post(`/order`, (req, res) => {
 
             if (existingUser) {
                 existingUser.orders = existingUser.orders || [];
-                existingUser.orders.push(newOrderDetails);
+                let existingProduct = existingUser.orders.find(o => o.name === newOrderDetails.name);
+
+                if (existingProduct) {
+                    existingProduct.quantity += newOrderDetails.quantity;
+                } else {
+                    existingUser.orders.push(newOrderDetails);
+                }
             } else {
                 let newOrder = {
                     userName: order.userName,
@@ -169,6 +175,7 @@ router.post(`/order`, (req, res) => {
         });
     });
 });
+
 
 router.post('/order/changeStatus', (req, res) => {
     const { phone, status, newStatus } = req.body;

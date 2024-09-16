@@ -6,7 +6,7 @@
 
 .notificationContainer {
   position: fixed;
-  min-width: 300px;
+  max-width: 100%;
   height: 75px;
   background-color: #fffcf8;
   bottom: 10px;
