@@ -59,7 +59,7 @@ bot.on('callback_query', (callbackQuery) => {
     bot.answerCallbackQuery(callbackQuery.id);
 });
 
-bot.on(`contact`, (msg) => {
+bot.on('contact', (msg) => {
     const chatId = msg.chat.id;
     const contact = msg.contact;
 
@@ -67,32 +67,37 @@ bot.on(`contact`, (msg) => {
         let userPhoneNumber = contact.phone_number;
         let formattedPhoneNumber = `+${userPhoneNumber}`;
         bot.sendMessage(chatId, 'Below is a list of your unconfirmed orders:');
-        fs.readFile(unconfirmedOrdersFilePath, `utf8`, (err, data) => {
+        fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
             if (err) {
                 console.log(err);
-                res.status(500).json({ error: 'Unable to read product file' })
+                return bot.sendMessage(chatId, 'Unable to read product file.');
             }
-            const orders = JSON.parse(data)
-            const Orders = orders.filter(order => order.orderConfirmed == false);
+            const orders = JSON.parse(data);
+            
+            const ordersUnconfirmed = orders.filter(o => o.status === 'unconfirmed' && (o.phone === formattedPhoneNumber || o.phone === userPhoneNumber));
+            
             let message = '';
             let totalPrice = 0;
 
-            for (let el of Orders) {
-                if (formattedPhoneNumber == el.phone || userPhoneNumber == el.phone) {
-                    message += `Name: ${el.name}\nPrice: ${el.price}\n\n`;
-                    totalPrice += el.price;
+            for (let el of ordersUnconfirmed) {
+                for (let order of el.orders) {
+                    message += `Name: ${order.name}\nPrice: ${order.price}\n\n`;
+                    totalPrice += order.price;
                 }
             }
 
             if (message !== '') {
                 message += `Total Price: ${totalPrice}`;
                 bot.sendMessage(chatId, message);
+            } else {
+                bot.sendMessage(chatId, 'No unconfirmed orders found.');
             }
-        })
+        });
     } else {
         bot.sendMessage(chatId, 'Failed to receive contact. Please try again.');
     }
-})
+});
+
 
 router.get(`/`, (req, res) => {
     fs.readFile(productsFilePath, `utf8`, (err, data) => {
@@ -136,7 +141,6 @@ router.post(`/order`, (req, res) => {
                 img: order.img,
                 name: order.name,
                 totalPrice: order.totalPrice,
-                orderConfirmed: false,
                 quantity: order.quantity,
                 orderDate: new Date().toLocaleString(),
                 orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3),
