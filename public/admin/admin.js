@@ -22,58 +22,69 @@ $(`#clearingFollowers`).click(() => {
     $(`.sendMessageContactor`).css(`display`, `flex`);
 });
 
-
 function updateOrderMainCart() {
     axios.get('/api/goods/orders')
         .then(res => {
             const data = res.data;
             $('.OredrsContainer').empty();
-
-            const confirmedOrders = data.filter(order => order.status === 'confirmed');
-            const unconfirmedOrders = data.filter(order => order.status === 'unconfirmed');
-
-            for (let user of confirmedOrders) {
+            for (let user of data) {
                 const { userName, phone, status, orders } = user;
 
-                $('.OredrsContainer').prepend(
-                    `<div class="userOrderContainer">
-                        <div class="userHeader">
-                            <div class="textContainer">
-                                <h2>Name: ${userName}</h2>
-                                <h2>Phone: ${phone}</h2>
+                if (status === 'unconfirmed') {
+                    $('.OredrsContainer').append(
+                        `<div class="userOrderContainer">
+                            <div class="userHeader">
+                                <div class="textContainer">
+                                    <h2>Name: ${userName}</h2>
+                                    <h2>Phone: ${phone}</h2>
+                                </div>
+                                <div class="orderStatusContainer">
+                                    <div class="orderStatus">
+                                        <h4>Status:</h4>
+                                        <select class="statusSelect" id="statusSelect_${phone.replace(/[\s()\-+]/g, ``)}_${status}">
+                                            <option value="unconfirmed">Unconfirmed</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="arrived">Arrived</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="orderStatusContainer">
-                                <div class="orderStatus"><h4>Status: ${status}</h4></div>
+                            <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, ``)}_${status}">
                             </div>
-                        </div>
-                        <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
-                        </div>
-                    </div>`
-                );
-
-                updateOrderCart(phone, orders);
-            }
-
-            for (let user of unconfirmedOrders) {
-                const { userName, phone, status, orders } = user;
-
-                $('.OredrsContainer').append(
-                    `<div class="userOrderContainer">
-                        <div class="userHeader">
-                            <div class="textContainer">
-                                <h2>Name: ${userName}</h2>
-                                <h2>Phone: ${phone}</h2>
+                        </div>`
+                    );
+                    $(`#statusSelect_${phone.replace(/[\s()\-+]/g, ``)}_${status}`).val(status);
+                    updateOrderCart(phone, orders, status);
+                }else{
+                    $('.OredrsContainer').append(
+                        `<div class="userOrderContainer">
+                            <div class="userHeader">
+                                <div class="textContainer">
+                                    <h2>Name: ${userName}</h2>
+                                    <h2>Phone: ${phone}</h2>
+                                </div>
+                                <div class="orderStatusContainer">
+                                    <div class="orderStatus">
+                                        <h4>Status:</h4>
+                                        <select class="statusSelect" id="statusSelect_${phone.replace(/[\s()\-+]/g, ``)}_${status}">
+                                            <option value="unconfirmed">Unconfirmed</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="arrived">Arrived</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="orderStatusContainer">
-                                <div class="orderStatus"><h4>Status: ${status}</h4></div>
+                            <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, ``)}_${status}">
                             </div>
-                        </div>
-                        <div class="mainOrderContainer" id="ordersFor_${phone.replace(/[\s()\-+]/g, '_')}">
-                        </div>
-                    </div>`
-                );
-
-                updateOrderCart(phone, orders);
+                        </div>`
+                    );
+                    $(`#statusSelect_${phone.replace(/[\s()\-+]/g, ``)}_${status}`).val(status);
+                    updateOrderCart(phone, orders, status);
+                }
             }
         })
         .catch(err => {
@@ -81,8 +92,21 @@ function updateOrderMainCart() {
         });
 }
 
-function updateOrderCart(phone, orders) {
-    const phoneContainer = $(`#ordersFor_${phone.replace(/[\s()\-+]/g, '_')}`);
+$(document).on('input', '.statusSelect', (e) => {
+    let phone = `+` + $(e.target).attr('id').split('_')[1];
+    let status = $(e.target).attr('id').split('_')[2];
+    let newStatus = $(e.target).val();
+    console.log(phone, status, newStatus);
+
+    axios.post(`/api/goods/order/changeStatus`, { phone, status, newStatus })
+        .then(res => {
+            console.log(res.data);
+            updateOrderMainCart();
+        })
+});
+
+function updateOrderCart(phone, orders, status) {
+    const phoneContainer = $(`#ordersFor_${phone.replace(/[\s()\-+]/g, ``)}_${status}`);
 
     for (let el of orders) {
         phoneContainer.append(

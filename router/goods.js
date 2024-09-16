@@ -79,7 +79,7 @@ bot.on(`contact`, (msg) => {
 
             for (let el of Orders) {
                 if (formattedPhoneNumber == el.phone || userPhoneNumber == el.phone) {
-                    message += `Name: ${el.name}\nPrice: ${el.price}\n\n`; 
+                    message += `Name: ${el.name}\nPrice: ${el.price}\n\n`;
                     totalPrice += el.price;
                 }
             }
@@ -129,7 +129,7 @@ router.post(`/order`, (req, res) => {
         let orders = JSON.parse(data);
 
         for (let order of cart) {
-            let existingUser = orders.find(o => o.phone === order.phone);
+            let existingUser = orders.find(o => o.phone === order.phone && o.status === 'unconfirmed');
 
             let newOrderDetails = {
                 price: order.price,
@@ -166,8 +166,45 @@ router.post(`/order`, (req, res) => {
     });
 });
 
+router.post('/order/changeStatus', (req, res) => {
+    const { phone, status, newStatus } = req.body;
+    console.log(phone, status, newStatus);
 
+    fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to read orders file' });
+        }
 
+        let orders = JSON.parse(data);
+
+        let filteredOrder = orders.find(order =>
+            order.phone === phone && order.status === status
+        );
+
+        let isOrderWithNewStatusExist = orders.find(order =>
+            order.phone === phone && order.status === newStatus
+        );
+
+        if (!filteredOrder) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        if (isOrderWithNewStatusExist) {
+            isOrderWithNewStatusExist.orders.push(...filteredOrder.orders);
+            orders = orders.filter(order => !(order.phone === phone && order.status === status));
+        } else {
+            filteredOrder.status = newStatus;
+        }
+
+        fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), 'utf8', err => {
+            if (err) {
+                return res.status(500).json({ error: 'Unable to write to orders file' });
+            }
+
+            res.json({ message: 'Order status changed successfully' });
+        });
+    });
+});
 
 router.post(`/order/confirm`, (req, res) => {
     const { phone, name } = req.body;
