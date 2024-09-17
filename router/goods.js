@@ -7,7 +7,7 @@ const router = express.Router();
 const TelegramBot = require('node-telegram-bot-api');
 const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
-const chat_id = process.env.CHAT_ID;
+const admin_chat_id = process.env.CHAT_ID;
 
 const productsFilePath = path.join(__dirname, '../data/products.json')
 const unconfirmedOrdersFilePath = path.join(__dirname, '../data/unconfirmedOrders.json')
@@ -16,22 +16,27 @@ const emailFilePath = path.join(__dirname, './data/follower.json')
 
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Welcome! Select an action to continue.', {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: 'Start confirmation',
-                        callback_data: 'start_confirmation'
-                    },
-                    {
-                        text: 'Contacts',
-                        callback_data: 'contacts'
-                    }
+    if (chatId != admin_chat_id) {
+        bot.sendMessage(chatId, 'Welcome! Select an action to continue.', {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: 'Start confirmation',
+                            callback_data: 'start_confirmation'
+                        },
+                        {
+                            text: 'Contacts',
+                            callback_data: 'contacts'
+                        }
+                    ]
                 ]
-            ]
-        }
-    });
+            }
+        });
+    } else if (chatId == admin_chat_id) {
+        bot.sendMessage(admin_chat_id, 'Administrator mode is enabled!');
+    }
+
 });
 
 bot.on('callback_query', (callbackQuery) => {
@@ -73,21 +78,21 @@ bot.on('contact', (msg) => {
                 return bot.sendMessage(chatId, 'Unable to read product file.');
             }
             const orders = JSON.parse(data);
-            
+
             const ordersUnconfirmed = orders.filter(o => o.status === 'unconfirmed' && (o.phone === formattedPhoneNumber || o.phone === userPhoneNumber));
-            
+
             let message = '';
             let totalPrice = 0;
 
             for (let el of ordersUnconfirmed) {
                 for (let order of el.orders) {
-                    message += `Name: ${order.name}\nQuantity: ${order.quantity}\nPrice: ${order.price}\n\n`;
+                    message += `Name: ${order.name}\nQuantity: ${order.quantity}\nPrice: ${order.price}$\n\n`;
                     totalPrice += order.price;
                 }
             }
 
             if (message !== '') {
-                message += `Total Price: ${totalPrice}`;
+                message += `Total Price: ${totalPrice}$`;
                 bot.sendMessage(chatId, message);
             } else {
                 bot.sendMessage(chatId, 'No unconfirmed orders found.');
@@ -132,6 +137,8 @@ router.post(`/order`, (req, res) => {
         }
 
         let orders = JSON.parse(data);
+        let adminMessage = `New order received!\n\n`;
+        let totalPrice = 0;
 
         for (let order of cart) {
             let existingUser = orders.find(o => o.phone === order.phone && o.status === 'unconfirmed');
@@ -140,7 +147,6 @@ router.post(`/order`, (req, res) => {
                 price: order.price,
                 img: order.img,
                 name: order.name,
-                totalPrice: order.totalPrice,
                 quantity: order.quantity,
                 orderDate: new Date().toLocaleString(),
                 orderId: new Date().toISOString().replace(/\D/g, '').slice(0, -3),
@@ -164,7 +170,33 @@ router.post(`/order`, (req, res) => {
                 };
                 orders.push(newOrder);
             }
+
+            let currentOrders = existingUser ? existingUser.orders : [newOrderDetails];
+
+            for (let product of currentOrders) {
+                adminMessage += `
+                - Product Name: ${product.name}
+                - Price: ${product.price}
+                - Quantity: ${product.quantity}
+                \n`;
+                totalPrice += product.price * product.quantity;
+            }
         }
+
+        adminMessage += `Total Price: ${totalPrice}$`;
+
+        bot.sendMessage(admin_chat_id, adminMessage, {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: 'Змінити статус на "confirmed"',
+                            callback_data: `confirm_order_${new Date().toISOString().replace(/\D/g, '').slice(0, -3)}`
+                        }
+                    ]
+                ]
+            }
+        });
 
         fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
@@ -175,6 +207,8 @@ router.post(`/order`, (req, res) => {
         });
     });
 });
+
+
 
 
 router.post('/order/changeStatus', (req, res) => {
