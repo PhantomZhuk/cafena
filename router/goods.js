@@ -24,10 +24,6 @@ bot.onText(/\/start/, (msg) => {
                         {
                             text: 'Start confirmation',
                             callback_data: 'start_confirmation'
-                        },
-                        {
-                            text: 'Contacts',
-                            callback_data: 'contacts'
                         }
                     ]
                 ]
@@ -71,7 +67,6 @@ bot.on('contact', (msg) => {
     if (contact) {
         let userPhoneNumber = contact.phone_number;
         let formattedPhoneNumber = `+${userPhoneNumber}`;
-        bot.sendMessage(chatId, 'Below is a list of your unconfirmed orders:');
         fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, data) => {
             if (err) {
                 console.log(err);
@@ -87,13 +82,25 @@ bot.on('contact', (msg) => {
             for (let el of ordersUnconfirmed) {
                 for (let order of el.orders) {
                     message += `Name: ${order.name}\nQuantity: ${order.quantity}\nPrice: ${order.price}$\n\n`;
-                    totalPrice += order.price;
+                    totalPrice += order.price * order.quantity;
                 }
             }
 
             if (message !== '') {
                 message += `Total Price: ${totalPrice}$`;
-                bot.sendMessage(chatId, message);
+                bot.sendMessage(chatId, 'Below is a list of your unconfirmed orders:');
+                bot.sendMessage(chatId, message, {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: 'Confirm order',
+                                    callback_data: `confirm_order_${formattedPhoneNumber}`
+                                }
+                            ]
+                        ]
+                    }
+                });
             } else {
                 bot.sendMessage(chatId, 'No unconfirmed orders found.');
             }
@@ -102,6 +109,41 @@ bot.on('contact', (msg) => {
         bot.sendMessage(chatId, 'Failed to receive contact. Please try again.');
     }
 });
+
+bot.on('callback_query', (callbackQuery) => {
+    const chatId = callbackQuery.message.chat.id;
+    const callbackData = callbackQuery.data; 
+
+    if (callbackData.startsWith('confirm_order_')) {
+        let phone = callbackData.split('_')[2].slice(1);
+        console.log(phone);
+
+        fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, fileData) => { 
+            if (err) {
+                console.log(err);
+                return bot.sendMessage(chatId, 'Unable to read orders file.');
+            }
+
+            let orders = JSON.parse(fileData);
+            let userOrder = orders.find(o => o.phone === phone && o.status === 'unconfirmed');
+            console.log(userOrder);
+
+            if (userOrder) {
+                userOrder.status = 'confirmed';
+
+                fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), 'utf8', (err) => {
+                    if (err) {
+                        console.log(err);
+                        return bot.sendMessage(chatId, 'Unable to update order status.');
+                    }
+
+                    bot.sendMessage(chatId, 'Your order has been confirmed!');
+                });
+            }
+        });
+    }
+});
+
 
 
 router.get(`/`, (req, res) => {
@@ -137,8 +179,9 @@ router.post(`/order`, (req, res) => {
         }
 
         let orders = JSON.parse(data);
-        let adminMessage = `New order received!\n\n`;
         let totalPrice = 0;
+        let adminMessage = '';
+        let order_id;
 
         for (let order of cart) {
             let existingUser = orders.find(o => o.phone === order.phone && o.status === 'unconfirmed');
@@ -166,6 +209,7 @@ router.post(`/order`, (req, res) => {
                     userName: order.userName,
                     phone: order.phone,
                     status: 'unconfirmed',
+                    order_id : new Date().toISOString().replace(/\D/g, '').slice(0, -3),
                     orders: [newOrderDetails]
                 };
                 orders.push(newOrder);
@@ -173,30 +217,18 @@ router.post(`/order`, (req, res) => {
 
             let currentOrders = existingUser ? existingUser.orders : [newOrderDetails];
 
+            adminMessage = `User: ${order.userName}\nPhone: ${order.phone}\nOrder details:\n\n`;
+            order_id = order.order_id;;
+
             for (let product of currentOrders) {
-                adminMessage += `
-                - Product Name: ${product.name}
-                - Price: ${product.price}
-                - Quantity: ${product.quantity}
-                \n`;
+                adminMessage += `- Product Name: ${product.name}\n- Price: ${product.price}\n- Quantity: ${product.quantity}\n\n`;
                 totalPrice += product.price * product.quantity;
             }
         }
 
         adminMessage += `Total Price: ${totalPrice}$`;
 
-        bot.sendMessage(admin_chat_id, adminMessage, {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        {
-                            text: 'Змінити статус на "confirmed"',
-                            callback_data: `confirm_order_${new Date().toISOString().replace(/\D/g, '').slice(0, -3)}`
-                        }
-                    ]
-                ]
-            }
-        });
+        bot.sendMessage(admin_chat_id, adminMessage);
 
         fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
@@ -207,6 +239,7 @@ router.post(`/order`, (req, res) => {
         });
     });
 });
+
 
 
 
