@@ -112,13 +112,13 @@ bot.on('contact', (msg) => {
 
 bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
-    const callbackData = callbackQuery.data; 
+    const callbackData = callbackQuery.data;
 
     if (callbackData.startsWith('confirm_order_')) {
-        let phone = callbackData.split('_')[2].slice(1);
+        let phone = callbackData.split('_')[2]
         console.log(phone);
 
-        fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, fileData) => { 
+        fs.readFile(unconfirmedOrdersFilePath, 'utf8', (err, fileData) => {
             if (err) {
                 console.log(err);
                 return bot.sendMessage(chatId, 'Unable to read orders file.');
@@ -130,6 +130,19 @@ bot.on('callback_query', (callbackQuery) => {
 
             if (userOrder) {
                 userOrder.status = 'confirmed';
+                let totalPrice = 0;
+                let adminMessage = '';
+
+                adminMessage = `User: ${userOrder.userName}\nPhone: ${userOrder.phone}\nOrder details:\n\n`;
+
+                for (let product of userOrder.orders) {
+                    adminMessage += `- Product Name: ${product.name}\n- Price: ${product.price}\n- Quantity: ${product.quantity}\n\n`;
+                    totalPrice += product.price * product.quantity;
+                }
+
+                adminMessage += `Total Price: ${totalPrice}$`;
+
+                bot.sendMessage(admin_chat_id, adminMessage);
 
                 fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), 'utf8', (err) => {
                     if (err) {
@@ -179,9 +192,6 @@ router.post(`/order`, (req, res) => {
         }
 
         let orders = JSON.parse(data);
-        let totalPrice = 0;
-        let adminMessage = '';
-        let order_id;
 
         for (let order of cart) {
             let existingUser = orders.find(o => o.phone === order.phone && o.status === 'unconfirmed');
@@ -209,26 +219,12 @@ router.post(`/order`, (req, res) => {
                     userName: order.userName,
                     phone: order.phone,
                     status: 'unconfirmed',
-                    order_id : new Date().toISOString().replace(/\D/g, '').slice(0, -3),
+                    order_id: new Date().toISOString().replace(/\D/g, '').slice(0, -3),
                     orders: [newOrderDetails]
                 };
                 orders.push(newOrder);
             }
-
-            let currentOrders = existingUser ? existingUser.orders : [newOrderDetails];
-
-            adminMessage = `User: ${order.userName}\nPhone: ${order.phone}\nOrder details:\n\n`;
-            order_id = order.order_id;;
-
-            for (let product of currentOrders) {
-                adminMessage += `- Product Name: ${product.name}\n- Price: ${product.price}\n- Quantity: ${product.quantity}\n\n`;
-                totalPrice += product.price * product.quantity;
-            }
         }
-
-        adminMessage += `Total Price: ${totalPrice}$`;
-
-        bot.sendMessage(admin_chat_id, adminMessage);
 
         fs.writeFile(unconfirmedOrdersFilePath, JSON.stringify(orders), `utf8`, err => {
             if (err) {
