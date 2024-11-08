@@ -28,11 +28,11 @@ function loadingProducts() {
                     $(`.popularCoffeeContainer`).append(
                         `
                         <div class="coffeeContainer">
-                            <img src="./${el.img}" alt="coffee">
+                            <img src="./img/${el.filename}" alt="coffee">
                             <h2>${el.name}</h2>
                             <div class="coffeePrise">$${el.price}</div>
                             <div class="btnContainer">
-                                <button id="${el.id}" class="btnBuy">Buy</button>
+                                <button id="${el._id}" class="btnBuy">Buy</button>
                             </div>
                     </div>
                     `
@@ -58,19 +58,20 @@ $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
 
 function updateCart() {
     for (let el of cart) {
+        console.log(el);
         $('.productContainer').append(
             `
             <div class="productInCart">
-                <img src="./${el.img}" alt="photo">
+                <img src="./img/${el.filename}" alt="photo">
                 <div class="textContainer">
                     <h4 class="name">${el.name}</h4>
                     <div class="bottomBlock">
                         <div class="quantityProductContainer">
-                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
-                            <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity}</div>
-                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
+                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el._id}"></i></div>
+                            <div class="quantityProduct" id="quantityProduct${el._id}">${el.quantity}</div>
+                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el._id}"></i></div>
                         </div>
-                        <p class="price" id="price${el.id}">${el.price * el.quantity}$</p>
+                        <p class="price" id="price${el._id}">${el.price * el.quantity}$</p>
                     </div>
                 </div>
             </div>
@@ -85,55 +86,57 @@ $(`.popularCoffeeContainer`).click((e) => {
     let ID = e.target.id;
     let quantity = 1;
 
-    axios.get(`/api/goods`)
-        .then(res => {
-            const data = res.data;
-            for (let el of data) {
-                if (el.category == "popular" && ID == el.id) {
-                    const exists = cart.find(item => item.id === ID);
+    if (ID) {
+        console.log(ID);
+        axios.get(`/api/goods`)
+            .then(res => {
+                const data = res.data;
+                for (let el of data) {
+                    if (el.category == "popular" && ID == el._id) {
+                        const exists = cart.find(item => item.id === ID);
+                        if (exists) {
+                            exists.quantity += 1;
+                            $(`#quantityProduct${ID}`).text(exists.quantity);
+                            $(`#price${ID}`).text(exists.price * exists.quantity + ` $`);
+                        } else {
+                            cart.push({
+                                filename: el.filename,
+                                name: el.name,
+                                price: el.price,
+                                id: ID,
+                                quantity: quantity
+                            });
 
-                    if (exists) {
-                        exists.quantity += 1;
-                        $(`#quantityProduct${ID}`).text(exists.quantity);
-                        $(`#price${ID}`).text(exists.price * exists.quantity + ` $`);
-                    } else {
-                        cart.push({
-                            img: el.img,
-                            name: el.name,
-                            price: el.price,
-                            id: ID,
-                            quantity: quantity
-                        });
-
-                        $('.productContainer').append(
-                            `
-                            <div class="productInCart">
-                                <img src="./${el.img}" alt="photo">
-                                <div class="textContainer">
-                                    <h4 class="name">${el.name}</h4>
-                                    <div class="bottomBlock">
-                                        <div class="quantityProductContainer">
-                                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
-                                            <div class="quantityProduct" id="quantityProduct${el.id}">${quantity}</div>
-                                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
-                                        </div>
-                                        <p class="price" id="price${el.id}">${el.price * quantity} $</p>
+                            $('.productContainer').append(
+                                `
+                        <div class="productInCart" id="${el._id}">
+                            <img src="./img/${el.filename}" alt="photo">
+                            <div class="textContainer">
+                                <h4 class="name">${el.name}</h4>
+                                <div class="bottomBlock">
+                                    <div class="quantityProductContainer">
+                                        <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el._id}"></i></div>
+                                        <div class="quantityProduct" id="quantityProduct${el._id}">${quantity}</div>
+                                        <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el._id}"></i></div>
                                     </div>
+                                    <p class="price" id="price${el._id}">${el.price * quantity} $</p>
                                 </div>
                             </div>
-                            `
-                        );
-                        $(`.notification`).text(`Product added to cart!`);
-                        $(`.notificationContainer`).css(`display`, `flex`);
-                        setTimeout(() => {
-                            $(`.notification`).text(``);
-                            $(`.notificationContainer`).css(`display`, `none`);
-                        }, 3000);
+                        </div>
+                        `
+                            );
+                            $(`.notification`).text(`Product added to cart!`);
+                            $(`.notificationContainer`).css(`display`, `flex`);
+                            setTimeout(() => {
+                                $(`.notification`).text(``);
+                                $(`.notificationContainer`).css(`display`, `none`);
+                            }, 3000);
+                        }
+                        $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                     }
-                    $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
                 }
-            }
-        })
+            })
+    }
 });
 
 
@@ -153,7 +156,7 @@ $('.productContainer').on('click', '.fa-minus', (e) => {
                     quantityElement.text(quantity - 1);
                     el.quantity = quantity - 1;
                     $.cookie(`cart`, JSON.stringify(cart), { path: '/' });
-                    $(`#price${el.id}`).text(el.price * el.quantity + `$`);
+                    $(`#price${el._id}`).text(el.price * el.quantity + `$`);
                 }
                 break;
             }
@@ -184,11 +187,11 @@ $(`#buyBtn`).click(() => {
     let isValidName = /[a-zA-Zа-яА-ЯіІїЇєЄґҐ'`-]{2,50}/
     if (isValidName.test(userName)) {
         if (telRegex.test(phone)) {
-            for (let el of cart) {
-                el.phone = phone;
-                el.userName = userName;
-            }
-            axios.post(`/api/goods/order`, { cart })
+            // for (let el of cart) {
+            //     el.phone = phone;
+            //     el.userName = userName;
+            // }
+            axios.post(`/api/goods/createOrder`, { userName, phone, status: `unconfirmed`, orders: cart })
                 .then(res => {
                     console.log(res.data.message);
                     cart = [];
@@ -207,14 +210,6 @@ $(`#buyBtn`).click(() => {
                 $(`.orderVerificationPopup`).css(`animation`, `none`);
                 $(`.orderVerificationPopup`).css(`display`, `none`);
             }, 1700);
-            setTimeout(() => {
-                $('.notification').html('To confirm the order, go to the Telegram bot <a href="https://t.me/cafena_manager_bot">@cafena_manager_bot</a>!');
-                $(`.notificationContainer`).css(`display`, `flex`);
-                setTimeout(() => {
-                    $(`.notificationContainer`).css(`display`, `none`);
-                    $(`.notification`).text(``);
-                }, 10000);
-            }, 1700)
         } else {
             $(`#telInput`).css(`border`, `2px solid red`);
             $(`.notification`).text(`Your phone number is incorrect.`);

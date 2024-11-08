@@ -20,7 +20,7 @@ $(`#subscribeBtn`).click(() => {
             axios.post(`/sendConfirmationEmail`, { email })
                 .then(res => {
                     console.log(res.data.message);
-                    if (res.data.message == `Code sent`) {
+                    if (res.data.message == `Email sent successfully`) {
                         $('#emailSubscriber').removeClass('email');
                         $('#emailSubscriber').addClass('code');
                         $('#emailSubscriber').attr("placeholder", "Enter the code sent to your email.");
@@ -31,7 +31,7 @@ $(`#subscribeBtn`).click(() => {
                             $(`#emailSubscriber`).css(`border`, `none`);
                             $(`.notification`).text(``);
                         }, 3000);
-                    } else if (res.data.message == `This email already exists`) {
+                    } else if (res.data.message == `Failed to send email`) {
                         $(`#emailSubscriber`).css(`border`, `2px solid red`);
                         $(`.notification`).text(`This email is already signed!`);
                         $(`.notificationContainer`).css(`display`, `flex`);

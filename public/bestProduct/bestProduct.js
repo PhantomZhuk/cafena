@@ -21,7 +21,7 @@ function loadingProducts() {
                         `
                         <div class="card">
                     <div class="imgBox">
-                        <img src="./${el.img}" alt="photo">
+                        <img src="./img/${el.filename}" alt="photo">
                     </div>
                     <div class="rating">Rating: <svg width="17" height="16" viewBox="0 0 17 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,7 @@ function loadingProducts() {
                     <h2>${el.name}</h2>
                     <div class="priceAndBtnContainer">
                         <p class="price">Price: <span>$${el.price}</span></p> 
-                        <button id="${el.id}" class="btnBuy">Buy</button>
+                        <button id="${el._id}" class="btnBuy">Buy</button>
                     </div>
                 </div>
                     `
@@ -80,16 +80,16 @@ function updateCart() {
         $('.productContainer').append(
             `
             <div class="productInCart">
-                <img src="./${el.img}" alt="photo">
+                <img src="./img/${el.filename}" alt="photo">
                 <div class="textContainer">
                     <h4 class="name">${el.name}</h4>
                     <div class="bottomBlock">
                         <div class="quantityProductContainer">
-                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
-                            <div class="quantityProduct" id="quantityProduct${el.id}">${el.quantity}</div>
-                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
+                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el._id}"></i></div>
+                            <div class="quantityProduct" id="quantityProduct${el._id}">${el.quantity}</div>
+                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el._id}"></i></div>
                         </div>
-                        <p class="price" id="price${el.id}">${el.price * el.quantity}$</p>
+                        <p class="price" id="price${el._id}">${el.price * el.quantity}$</p>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@ $(`.cardContainer`).click((e) => {
         .then(res => {
             const data = res.data;
             for (let el of data) {
-                if (el.category == "best" && ID == el.id) {
+                if (el.category == "best" && ID == el._id) {
                     const exists = cart.find(item => item.id === ID);
 
                     if (exists) {
@@ -117,7 +117,7 @@ $(`.cardContainer`).click((e) => {
                         $(`#price${ID}`).text(exists.price * exists.quantity + ` $`);
                     } else {
                         cart.push({
-                            img: el.img,
+                            filename: el.filename,
                             name: el.name,
                             price: el.price,
                             id: ID,
@@ -126,17 +126,17 @@ $(`.cardContainer`).click((e) => {
 
                         $('.productContainer').append(
                             `
-                            <div class="productInCart">
-                                <img src="./${el.img}" alt="photo">
+                            <div class="productInCart" id="${el._id}">
+                                <img src="./img/${el.filename}" alt="photo">
                                 <div class="textContainer">
                                     <h4 class="name">${el.name}</h4>
                                     <div class="bottomBlock">
                                         <div class="quantityProductContainer">
-                                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el.id}"></i></div>
-                                            <div class="quantityProduct" id="quantityProduct${el.id}">${quantity}</div>
-                                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el.id}"></i></div>
+                                            <div class="btnPlusProduct"><i class="fa-solid fa-plus" id="plus${el._id}"></i></div>
+                                            <div class="quantityProduct" id="quantityProduct${el._id}">${quantity}</div>
+                                            <div class="btnMinusProduct"><i class="fa-solid fa-minus" id="minus${el._id}"></i></div>
                                         </div>
-                                        <p class="price" id="price${el.id}">${el.price * quantity} $</p>
+                                        <p class="price" id="price${el._id}">${el.price * quantity} $</p>
                                     </div>
                                 </div>
                             </div>
