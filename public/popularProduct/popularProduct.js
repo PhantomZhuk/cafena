@@ -187,10 +187,6 @@ $(`#buyBtn`).click(() => {
     let isValidName = /[a-zA-Zа-яА-ЯіІїЇєЄґҐ'`-]{2,50}/
     if (isValidName.test(userName)) {
         if (telRegex.test(phone)) {
-            // for (let el of cart) {
-            //     el.phone = phone;
-            //     el.userName = userName;
-            // }
             axios.post(`/api/goods/createOrder`, { userName, phone, status: `unconfirmed`, orders: cart })
                 .then(res => {
                     console.log(res.data.message);

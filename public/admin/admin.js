@@ -115,7 +115,7 @@ function updateOrderCart(phone, orders, status) {
             `
             <div class="productInCart">
                 <div class="imgContainer">
-                    <img src="./${el.img}" alt="photo">
+                    <img src="./img/${el.filename}" alt="photo">
                 </div>
                 <div class="textContainer">
                     <h4 class="name">${el.name}</h4>

@@ -226,7 +226,7 @@ router.post(`/createOrder`, async (req, res) => {
     }
 
     try {
-        const order = await Order.findOne({ userName, phone });
+        const order = await Order.findOne({ userName, phone, status });
         let adminMessage = `User: ${userName}\nPhone: ${phone}\nOrder details:\n\n`;
         if (!order) {
             const newOrder = new Order({
@@ -236,12 +236,25 @@ router.post(`/createOrder`, async (req, res) => {
                 orders
             })
 
-            adminMessage += `- Product Name: ${orders.name}\n- Price: ${orders.price}\n- Quantity: ${orders.quantity}\n\n`;
+            orders.forEach(order => {
+                adminMessage += `- Product Name: ${order.name}\n- Price: ${order.price}\n- Quantity: ${order.quantity}\n\n`;
+            })
 
             await newOrder.save();
             res.send({ message: 'Order created' });
         } else {
-            order.orders.push(...orders);
+            for (let product of orders) {
+                let existingOrder = order.orders.find(o => o.name === product.name && o.id === product.id);
+                if (existingOrder) {
+                    existingOrder.quantity += product.quantity;
+                    adminMessage += `- Product Name: ${existingOrder.name}\n- Price: ${existingOrder.price}\n- Quantity: ${existingOrder.quantity}\n\n`;
+                } else {
+                    order.orders.push(product);
+                    adminMessage += `- Product Name: ${product.name}\n- Price: ${product.price}\n- Quantity: ${product.quantity}\n\n`;
+                }
+            }
+            order.markModified('orders');
+
             await order.save();
             res.send({ message: 'Order updated' });
         }
@@ -253,10 +266,9 @@ router.post(`/createOrder`, async (req, res) => {
     }
 });
 
-router.get(`/orders`, (req, res) => {
-    const orders = Order.find();
-    const filteredOrders = orders.filter(order => order.status != `unconfirmed`);
-    res.json(filteredOrders);
+router.get(`/orders`, async (req, res) => {
+    const orders = await Order.find();
+    res.json(orders);
 });
 
 // router.post('/order/changeStatus', (req, res) => {

@@ -203,11 +203,7 @@ $(`#buyBtn`).click(() => {
     let isValidName = /[a-zA-Zа-яА-ЯіІїЇєЄґҐ'`-]{2,50}/
     if (isValidName.test(userName)) {
         if (telRegex.test(phone)) {
-            for (let el of cart) {
-                el.phone = phone;
-                el.userName = userName;
-            }
-            axios.post(`/api/goods/order`, { cart })
+            axios.post(`/api/goods/createOrder`, { userName, phone, status: `unconfirmed`, orders: cart })
                 .then(res => {
                     console.log(res.data.message);
                     cart = [];
@@ -226,15 +222,6 @@ $(`#buyBtn`).click(() => {
                 $(`.orderVerificationPopup`).css(`animation`, `none`);
                 $(`.orderVerificationPopup`).css(`display`, `none`);
             }, 1700);
-            setTimeout(() => {
-                $('.notification').html('To confirm the order, go to the Telegram bot <a href="https://t.me/cafena_manager_bot">@cafena_manager_bot</a>!');
-                $(`.notificationContainer`).css(`display`, `flex`);
-                setTimeout(() => {
-                    $(`.notificationContainer`).css(`display`, `none`);
-                    $(`.notification`).text(``);
-                }, 10000);
-            }, 1700)
-
         } else {
             $(`#telInput`).css(`border`, `2px solid red`);
             $(`.notification`).text(`Your phone number is incorrect.`);
