@@ -78,36 +78,24 @@ app.get('/profile', (req, res) => {
 //     });
 // });
 
-// app.get(`/followerList`, (req, res) => {
-//     fs.readFile(emailFilePath, `utf8`, (err, data) => {
-//         if (err) {
-//             console.log(err);
-//             res.status(500).json({ error: 'Unable to read follower file' })
-//         }
-//         const followers = JSON.parse(data)
-//         res.json(followers);
-//     })
-// })
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
 
-// app.get('/events', (req, res) => {
-//     res.setHeader('Content-Type', 'text/event-stream');
-//     res.setHeader('Cache-Control', 'no-cache');
-//     res.setHeader('Connection', 'keep-alive');
-//     res.flushHeaders();
+    timerID = setInterval(() => {
+        res.write(`data: ${JSON.stringify({ currentmail })}\n\n`);
+    }, 3000);
 
-//     timerID = setInterval(() => {
-//         res.write(`data: ${JSON.stringify({ currentmail })}\n\n`);
-//     }, 3000);
+    req.on('close', () => {
+        clearInterval(timerID);
+    });
+});
 
-//     req.on('close', () => {
-//         clearInterval(timerID);
-//     });
-// });
-
-// app.get('/status', (req, res) => {
-//     res.json({ currentmail });
-// });
-
+app.get('/status', (req, res) => {
+    res.json({ currentmail });
+});
 
 // app.post(`/signup`, (req, res) => {
 //     let { login, email, password } = req.body
@@ -152,141 +140,132 @@ app.get('/profile', (req, res) => {
 //         res.send(signup);
 //     }, 1000)
 // })
-// const emailFilePath = path.join(__dirname, './data/follower.json')
 
-// app.post(`/subscribe`, (req, res) => {
-//     let { email, code } = req.body;
-//     let info = {
-//         email,
-//         time: new Date().toLocaleString()
-//     }
-//     fs.readFile(emailFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({ error: 'Unable to read orders file' });
-//         }
+const FollowerSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true
+    },
+    time: {
+        type: String,
+        required: true
+    }
+})
 
-//         let fileContent = JSON.parse(data);
-//         if (code == randomCode) {
-//             fileContent.push(info);
-//             fs.writeFile(emailFilePath, JSON.stringify(fileContent), (err) => {
-//                 if (err) {
-//                     console.error('Error writing file:', err);
-//                 } else {
-//                     console.log('File has been written successfully.');
-//                 }
-//             });
-//             res.send({ massage: `data saved` })
-//         } else {
-//             res.send({ massage: `Incorrect code` })
-//         }
-//     });
-// })
+const Follower = mongoose.model('Follower', FollowerSchema);
 
-// app.post(`/deleteFollower`, (req, res) => {
-//     const { email } = req.body;
+let randomCode;
+app.post('/sendConfirmationEmail', async (req, res) => {
+    let { email } = req.body;
 
-//     fs.readFile(emailFilePath, `utf8`, (err, data) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Unable to read follower file' });
-//         }
+    try {
+        const follower = await Follower.findOne({ email });
+        if (!follower) {
+            randomCode = Math.floor(Math.random() * (9999 - 1000) + 1000).toString();
 
-//         const followers = JSON.parse(data);
+            let mailOptions = {
+                from: 'Cafena',
+                to: email,
+                subject: 'Login code',
+                text: randomCode,
+            };
 
-//         const index = followers.findIndex(follower => follower.email === email);
+            transporter.sendMail(mailOptions, function (err, info) {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({ error: 'Failed to send email' });
+                } else {
+                    console.log(`Message was sent: ${info.response}`);
+                    return res.status(200).json({ message: 'Email sent successfully' });
+                }
+            });
+        } else {
+            return res.send({ message: 'This email already exists' });
+        }
+    } catch (err) {
+        console.log(err)
+    }
+});
 
-//         if (index === -1) {
-//             return res.status(404).json({ error: 'Follower not found' });
-//         }
+app.post(`/subscribe`, async (req, res) => {
+    let { email, code } = req.body;
 
-//         followers.splice(index, 1);
+    try {
+        if (code == randomCode) {
+            const follower = await Follower.findOne({ email });
+            if (!follower) {
+                const newFollower = new Follower({
+                    email,
+                    time: new Date().toLocaleString()
+                });
 
-//         fs.writeFile(emailFilePath, JSON.stringify(followers), 'utf8', err => {
-//             if (err) {
-//                 return res.status(500).json({ error: 'Unable to write to follower file' });
-//             }
+                await newFollower.save();
 
-//             res.json({ message: 'Follower deleted successfully' });
-//         });
-//     });
-// });
+                return res.send({ message: `data saved` });
+            } else {
+                return res.send({ message: 'This email already exists' });
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+})
 
-// let currentmail = 0;
-// app.post(`/sendMessage`, (req, res) => {
-//     fs.readFile(emailFilePath, `utf8`, (err, data) => {
-//         if (err) {
-//             console.log(err);
-//             res.status(500).json({ error: 'Unable to read follower file' })
-//         }
-//         const followers = JSON.parse(data)
-//         currentmail = 0
-//         let timerID = setInterval(function () {
-//             if (currentmail < followers.length) {
-//                 let mailOptions = {
-//                     from: 'Administrator',
-//                     to: followers[currentmail].email,
-//                     subject: 'Message from cafena',
-//                     text: req.body.massage,
-//                 };
+app.get(`/followerList`, async (req, res) => {
+    const follower = await Follower.find();
+    res.json(follower);
+})
 
-//                 transporter.sendMail(mailOptions, function (err, info) {
-//                     if (err) {
-//                         console.log(err);
-//                     } else {
-//                         console.log(`Message was sended: ${info.response}`);
-//                     }
-//                 });
+app.post(`/deleteFollower`, (req, res) => {
+    const { id } = req.body;
 
-//                 currentmail++;
-//                 console.log(`Message ${currentmail} sent.`);
-//             }
-//             else {
-//                 clearInterval(timerID);
-//                 console.log('Sending completed!')
-//                 res.status(200).json({ message: 'Email send was done' })
-//             }
-//         }, 3000)
-//     })
-// })
+    Follower.findByIdAndDelete(id)
+        .then(() => {
+            res.json({ message: 'Follower deleted successfully' });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: 'Unable to delete follower' });
+        });
+});
 
-// let randomCode;
-// app.post('/sendConfirmationEmail', (req, res) => {
-//     let { email } = req.body;
+let currentmail = 0;
+app.post(`/sendMessage`, async (req, res) => {
+    currentmail = 0;
 
-//     fs.readFile(emailFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({ error: 'Unable to read orders file' });
-//         }
+    try {
+        const follower = await Follower.find();
 
-//         let fileContent = JSON.parse(data);
+        let timerID = setInterval(function () {
+            if (currentmail < follower.length) {
+                let mailOptions = {
+                    from: 'Administrator',
+                    to: follower[currentmail].email,
+                    subject: 'Message from cafena',
+                    text: req.body.massage,
+                };
 
-//         const emailExists = fileContent.some(el => el.email === email);
+                transporter.sendMail(mailOptions, function (err, info) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(`Message was sended: ${info.response}`);
+                    }
+                });
 
-//         if (emailExists) {
-//             return res.send({ message: 'This email already exists' });
-//         }
-
-//         randomCode = Math.floor(Math.random() * (9999 - 1000) + 1000).toString();
-
-//         let mailOptions = {
-//             from: 'Cafena',
-//             to: email,
-//             subject: 'Login code',
-//             text: randomCode,
-//         };
-
-//         transporter.sendMail(mailOptions, function (err, info) {
-//             if (err) {
-//                 console.log(err);
-//                 return res.status(500).json({ error: 'Failed to send email' });
-//             } else {
-//                 console.log(`Message was sent: ${info.response}`);
-//                 return res.status(200).json({ message: 'Email sent successfully' });
-//             }
-//         });
-//     });
-// });
+                currentmail++;
+                console.log(`Message ${currentmail} sent.`);
+            }
+            else {
+                clearInterval(timerID);
+                console.log('Sending completed!')
+                res.status(200).json({ message: 'Email send was done' })
+            }
+        }, 3000);
+    }catch (err) {
+        console.log(err);
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`Server work op port ${PORT}`)

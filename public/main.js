@@ -60,8 +60,8 @@ $(`#subscribeBtn`).click(() => {
         $(`#emailSubscriber`).val(``);
         axios.post(`/subscribe`, { email, code })
             .then(res => {
-                console.log(res.data.massage);
-                if (res.data.massage == `data saved`) {
+                console.log(res.data.message);
+                if (res.data.message == `data saved`) {
                     $(`.notification`).text(`You have subscribed to the newsletter.`);
                     $(`.notificationContainer`).css(`display`, `flex`);
                     setTimeout(() => {

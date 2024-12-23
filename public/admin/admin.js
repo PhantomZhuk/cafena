@@ -146,7 +146,7 @@ function updateFolowerCart() {
                     <div class="followerContainer">
                         <h2>${el.email}</h2>
                         <p>${el.time}</p>
-                        <div class="deleteFollowerBtn" id="delete${el.email}">
+                        <div class="deleteFollowerBtn" id="delete${el._id}">
                             <i class="fa-solid fa-trash-can"></i>
                         </div>
                     </div>
@@ -158,15 +158,15 @@ function updateFolowerCart() {
 updateFolowerCart()
 
 $(`.wrap`).click((e) => {
-    let id = $(e.target).attr('id');
+    let ID = $(e.target).attr('id');
 
-    if (id && id.includes('delete')) {
-        let email = id.replace('delete', '').trim();
+    if (ID && ID.includes('delete')) {
+        let id = ID.replace('delete', '').trim();
 
         numberFollower--
         $(`#numberFollower`).text(numberFollower)
 
-        axios.post(`/deleteFollower`, { email })
+        axios.post(`/deleteFollower`, { id })
             .then(res => {
                 console.log(res.data.message);
                 updateFolowerCart();
